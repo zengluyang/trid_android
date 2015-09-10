@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- @author:DengRenbin-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height_line"
+    android:orientation="horizontal" >
+    <View 
+        android:layout_width="@dimen/bianju_settings_item"
+		android:layout_height="match_parent"
+		android:background="@color/touming"/>
+	<View 
+	    android:layout_width="0dp"
+	    android:layout_height="match_parent"
+	    android:background="#200f0f0f"
+	    android:layout_weight="1" />
+</LinearLayout>
