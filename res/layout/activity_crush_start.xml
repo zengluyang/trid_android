@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- @author:DengRenbin-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:gravity="bottom|center_horizontal"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/large_fontsize"
+        android:gravity="center"
+        android:layout_marginBottom="100dp"
+        android:lineSpacingMultiplier="1.5"
+        android:textColor="@color/black"
+        android:text="@string/first_time_to_anlian"
+        />
+    <Button 
+        android:id="@+id/btn_anlian_start"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/height_btn"
+        android:layout_marginBottom="@dimen/distance_btn_bottom"
+        android:gravity="center"
+        android:textSize="@dimen/large_fontsize"
+        android:textColor="@color/black"
+        android:background="@drawable/btn_ocean_selector"
+        android:text="    开启暗恋    "
+        />
+</LinearLayout>

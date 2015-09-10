@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/alarm_tips1" 
+        android:textSize="18sp"
+        android:layout_marginLeft="42dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/alarm_tips2"
+        android:textColor="@color/black"
+        android:layout_marginLeft="38dp"
+        android:layout_marginTop="8dp"
+        android:textSize="22sp" />
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="5dp"
+	    android:orientation="horizontal" >
+	    <ImageView
+	        android:layout_width="20dp"
+	        android:layout_height="40dp"
+	        android:layout_marginLeft="18dp"
+	        android:layout_gravity="center"
+	        android:src="@drawable/add"/>
+	 
+      	<EditText
+      	    android:id="@+id/alarm_content"
+      	    android:layout_gravity="center"
+	        android:layout_width="wrap_content"
+	        android:layout_height = "wrap_content"
+	        android:layout_marginLeft="4dp"
+	        android:background="@null"
+	        android:hint = "将显示给对方"
+	        />
+  	</LinearLayout>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/alarm_tips3"
+        android:textColor="@color/black"
+         android:layout_marginLeft="42dp"
+         android:layout_marginTop="8dp"
+        android:textSize="22sp" />
+    
+    
+
+    <com.xicheng.trid.timepicker.TimePicker
+        android:layout_marginTop="20dp"
+        android:id="@+id/timePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+    
+    <Button 
+        android:id="@+id/btn_sure_alarm"
+        android:layout_width="80dp"
+        android:layout_height="@dimen/height_btn"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_ocean_selector"
+        android:text="确定"
+        android:textSize="@dimen/fontsize_normal"
+        />
+
+</LinearLayout>

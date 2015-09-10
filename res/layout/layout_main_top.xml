@@ -1,0 +1,52 @@
+<!-- @author:DengRenbin-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/top_layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/top_layout_height"
+    android:gravity="center"
+    android:background="@color/touming"
+    android:orientation="horizontal" >
+    
+    <!-- 
+    android:fitsSystemWindows="true"  
+	android:clipToPadding="true"
+	添加到上面LinearLayout以实现状态栏沉浸 -->
+    <!-- 侧边栏按钮 -->
+    <ImageButton
+        android:contentDescription="@string/app_name"
+        android:id="@+id/left_menu_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/top_bian_ju"
+        android:layout_marginStart="@dimen/top_bian_ju"
+        android:background="@color/touming"
+        android:src="@drawable/fanhui" />
+    
+    <!-- pagenameTextView -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:background="@color/touming"
+        android:text="@string/liao_tian"
+        android:textSize="@dimen/fontsize_large" 
+        android:textColor="@color/black"/>
+    
+    <!-- 匹配按钮 -->
+    <ImageButton
+        android:contentDescription="@string/app_name"
+        android:id="@+id/right_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="@dimen/top_bian_ju"
+        android:layout_marginEnd="@dimen/top_bian_ju"
+        android:background="@color/touming"
+        android:src="@drawable/match" />
+</RelativeLayout>
