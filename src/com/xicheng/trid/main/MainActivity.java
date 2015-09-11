@@ -111,6 +111,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		setContentView(R.layout.activity_main);
 		errorItem = (RelativeLayout) findViewById(R.id.rl_error_item);
 		errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
+		Log.i(TAG, "[onCreate]");
 		// 设置为已登录
 		ConnInfo.setAlreadyLogin(this, true);
 		// 实现状态栏沉浸
