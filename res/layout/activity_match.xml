@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- @author:DengRenbin-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:gravity="bottom|center_horizontal"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/fontsize_xsmall"
+        android:gravity="left"
+        android:layout_marginBottom="60dp"
+        android:lineSpacingMultiplier="1.2"
+        android:textColor="@color/black"
+        android:text="@string/pipei_text"
+        />
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/distance_btn_bottom"
+        >
+	    <Button 
+	        android:id="@+id/btn_match_return"
+	        android:layout_width="wrap_content"
+	        android:layout_height="@dimen/height_btn"
+	        android:gravity="center"
+	        android:textSize="@dimen/fontsize_normal"
+	        android:textColor="@color/black"
+	        android:background="@drawable/btn_ocean_selector"
+	        android:text="    取消    "
+	        />
+	    <Button 
+	        android:id="@+id/btn_match_join"
+	        android:layout_width="wrap_content"
+	        android:layout_height="@dimen/height_btn"
+	        android:gravity="center"
+	        android:layout_marginLeft="60dp"
+	        android:textSize="@dimen/fontsize_normal"
+	        android:textColor="@color/black"
+	        android:background="@drawable/btn_ocean_selector"
+	        android:text="    加入    "
+	        />
+    </LinearLayout>
+</LinearLayout>
