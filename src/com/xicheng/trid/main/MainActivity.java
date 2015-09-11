@@ -126,7 +126,11 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		initListener();
 		Log.i(TAG, "oncreate");
 		// 预下载二选一图片
+<<<<<<< HEAD
 	    // downloadPreferPic();
+=======
+		// downloadPreferPic();
+>>>>>>> f933d7599c721f9c4fe3f11ffc9a295608ef03a8
 	}
 
 	/**

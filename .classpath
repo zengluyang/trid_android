@@ -4,8 +4,14 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="lib" path="libs/gson-2.2.4.jar"/>
+<<<<<<< HEAD
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/slidelibrary"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+=======
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/slidelibrary"/>
+>>>>>>> f933d7599c721f9c4fe3f11ffc9a295608ef03a8
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
