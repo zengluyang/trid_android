@@ -38,6 +38,8 @@ public class CrushActivity extends BaseActivity {
 	private EditText edt_phoneNum;// 电话号码输入框
 	private EditText edt_someWords;// 一句话输入框
 	private Button btn_send;// 确认按钮
+	private Button btn_return;// 取消按钮
+	
 
 	private AddFriendRequest post;
 
@@ -48,7 +50,9 @@ public class CrushActivity extends BaseActivity {
 		edt_phoneNum = (EditText) findViewById(R.id.edt_crush_phoneNum);
 		edt_someWords = (EditText) findViewById(R.id.edt_crush_somewords);
 		btn_send = (Button) findViewById(R.id.btn_crush_send);
+		btn_return = (Button) findViewById(R.id.btn_crush_return);
 
+		// 确认发送
 		btn_send.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				String phoneNum = edt_phoneNum.getText().toString();
@@ -59,6 +63,12 @@ public class CrushActivity extends BaseActivity {
 					post = new AddFriendRequest(phoneNum, words);
 					HttpUtil.postRequest(RequestUrlValue.ADD_FRIEND_REQUEST, new Gson().toJson(post));
 				}
+			}
+		});
+		// 取消按钮
+		btn_return.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				finish();
 			}
 		});
 	}
