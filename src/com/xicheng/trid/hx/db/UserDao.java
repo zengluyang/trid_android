@@ -56,9 +56,11 @@ public class UserDao {
 	public static final String ROBOT_COLUMN_NAME_NICK = "nick";
 	public static final String ROBOT_COLUMN_NAME_AVATAR = "avatar";
 	
-	
+	// settings相关常量
 	public static final String SETTINGS_TABLE_NAME = "settings";
 	public static final String SETTINGS_COLUMN_NAME_ID = "username";
+	public static final String SETTINGS_COLUMN_NAME_SETTINGNAME = "setting_name";
+	public static final String SETTINGS_COLUMN_NAME_STATUS = "status";
 	
 	public UserDao(Context context) {
 	    DemoDBManager.getInstance().onInit(context);
