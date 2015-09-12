@@ -375,7 +375,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 					chat_icon.setImageResource(R.drawable.chat_off);
 					heart_icon.setImageResource(R.drawable.heart_on);
 					views_icon.setImageResource(R.drawable.views_off);
-					title.setText("9377雷霆之怒");
+					title.setText("悠悠我心");
 					break;
 				case 2:
 					chat_icon.setImageResource(R.drawable.chat_off);
@@ -528,10 +528,23 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		super.onSaveInstanceState(outState);
 	}
 
-	@Override
+	/**
+	 * 重写物理按键动作
+	 */
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			moveTaskToBack(false);
+			if (menu.isMenuShowing()) {
+				menu.showContent();
+			} else {
+				moveTaskToBack(false);
+			}
+			return true;
+		} else if(keyCode == KeyEvent.KEYCODE_MENU){
+			if(menu.isMenuShowing()){
+				menu.showContent();
+			} else {
+				menu.showMenu();
+			}
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
