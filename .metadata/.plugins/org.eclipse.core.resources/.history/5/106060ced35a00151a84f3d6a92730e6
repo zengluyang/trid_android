@@ -1,0 +1,69 @@
+package com.xicheng.trid.utils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.TextMessageBody;
+
+/**
+ * 单例模式,json解析器
+ * @author zyl
+ *
+ */
+public class JsonParser {
+	private static JsonParser parser=null;
+	private EMConversation conversation;
+	private List<EMMessage> list;
+	private EMMessage msg;
+	//私有构造器，防止非法创建
+	private JsonParser(){}
+	//创建一个单例
+	public static synchronized JsonParser getInstance(){
+		if(parser==null){
+			parser=new JsonParser();
+		}
+		return parser;
+	}
+	
+	private void setMessage(JSONObject obj){
+		list=new ArrayList();
+		try {
+			JSONArray data=obj.getJSONArray("chat_records");
+			for (int i=0;i<data.length();i++){
+				JSONObject info=data.getJSONObject(i);
+				if(info.getJSONObject("payload").getJSONArray("bodies")
+						.getJSONObject(0).getString("type").equals("txt")){
+					
+					msg=EMMessage.createSendMessage(EMMessage.Type.TXT);
+					msg.addBody(new TextMessageBody(info.getJSONObject("payload").getJSONArray("bodies")
+							.getJSONObject(0).getString("msg")));
+					msg.setType(EMMessage.Type.TXT);
+					msg.setTo(info.getString("to"));
+					msg.setFrom(info.getString("from"));
+					msg.setMsgId(info.getString("msg_id"));
+					msg.setChatType(EMMessage.ChatType.Chat);
+					
+				}
+			}
+				
+		} catch (JSONException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+	//填充message以获取conversation对象
+	public EMConversation getConversation(JSONObject obj){
+		for(EMMessage msg:list)
+			conversation.addMessage(msg);
+		return conversation;
+		
+	}
+	
+}

@@ -1,0 +1,43 @@
+package com.xicheng.trid.utils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONObject;
+
+import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMMessage;
+
+/**
+ * 单例模式,json解析器
+ * @author zyl
+ *
+ */
+public class JsonParser {
+	private static JsonParser parser=null;
+	private EMConversation conversation;
+	private List<EMMessage> list;
+	private EMMessage msg;
+	//私有构造器，防止非法创建
+	private JsonParser(){}
+	//创建一个单例
+	public static synchronized JsonParser getInstance(){
+		if(parser==null){
+			parser=new JsonParser();
+		}
+		return parser;
+	}
+	
+	private void setMessage(JSONObject obj){
+		list=new ArrayList();
+		
+	}
+	//填充message以获取conversation对象
+	public EMConversation getConversation(JSONObject obj){
+		for(EMMessage msg:list)
+			conversation.addMessage(msg);
+		return conversation;
+		
+	}
+	
+}
