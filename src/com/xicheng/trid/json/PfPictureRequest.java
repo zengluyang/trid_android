@@ -16,5 +16,6 @@ public class PfPictureRequest {
 		type = RequestTypeValue.PF_PICTURE_REQUEST;
 		tel = ConnInfo.TEL;
 		token = ConnInfo.TOKEN;
+		//日后记得删掉这行注释
 	}
 }
