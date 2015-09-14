@@ -65,6 +65,21 @@ public class UserDao {
 	public UserDao(Context context) {
 	    DemoDBManager.getInstance().onInit(context);
 	}
+	/**
+	 * 保存本地设置
+	 * 
+	 * @param settingsList
+	 */
+	public void saveSettings(List<Map<String,Integer>> settingsList){
+		DemoDBManager.getInstance().saveSettingsList(settingsList);
+	}
+	/**
+	 * 获取本地设置
+	 * @return
+	 */
+	public List<Map<String, Integer>> getSettingsList(){
+		return DemoDBManager.getInstance().getSettingsList();
+	}
 
 	/**
 	 * 保存好友list
