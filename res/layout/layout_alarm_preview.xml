@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/alarm_preview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/more_but_background"
+     >
+    <RelativeLayout
+        android:id="@+id/alarm_tip_1"
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    >
+	    
+	    <ImageView
+	        android:id="@+id/add_alarm"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/chat_add_alarm"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:padding="30dp"
+            android:onClick="onClick"
+            
+           />
+        <TextView
+        android:id="@+id/text11"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:clickable="true"
+	    android:gravity="center_vertical"
+	    android:paddingLeft="@dimen/bianju_settings_item" 
+	    android:text="为对方设置闹钟"
+	    android:textColor="@color/black"
+	    android:textSize="@dimen/content_fontsize" 
+	    android:layout_centerVertical="true"/>
+        
+        
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:id="@+id/rl_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="36dp"
+        android:paddingBottom="5dp"
+        android:layout_below="@id/alarm_tip_1"
+        
+        >
+	    <RelativeLayout
+	        android:id="@+id/ll_1"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:onClick="onClick"
+	        >
+	     
+	     <TextView
+	         android:id="@+id/date_1"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_alignParentLeft="true"
+	         android:layout_marginLeft="10dp"
+	         android:text="明天"
+	         android:textColor="@color/black"
+	         android:textSize="@dimen/content_fontsize" 
+	         android:layout_alignBottom="@+id/time_1"/>
+	     <TextView
+	         android:id="@id/time_1"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_toRightOf="@id/date_1"
+	         android:paddingLeft="5dp" 
+	         android:text="08:00"
+	         android:textColor="@color/black"
+	         android:textSize="25sp" />
+	     
+	      <TextView
+		        android:id="@+id/text_12"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="* 帮我买早餐"
+			    android:textColor="@color/black"
+			    android:textSize="@dimen/content_fontsize" 
+			    android:layout_below="@id/date_1"
+			    android:layout_alignLeft="@id/date_1"
+			    android:layout_marginTop="3dp"/>
+	        
+	        
+	      </RelativeLayout>
+	      <ToggleButton
+	         android:id="@+id/but_preview_1"
+	         android:layout_width="70dp"
+	         android:layout_height="45dp"
+	         android:layout_marginRight="10dp"
+	         android:textOn=""
+		     android:textOff=""
+	         android:background="@drawable/togglebutton_selector"/>
+    </LinearLayout>
+   
+    <View
+        android:id="@+id/v1"
+	    android:layout_width="match_parent"
+	    android:layout_height="2dp"
+	    android:background="@color/white"
+	    android:layout_below="@id/rl_1"></View>
+        <RelativeLayout
+	        android:id="@+id/alarm_tip_2"
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:layout_below="@id/v1"
+	    >
+        <TextView
+	        android:id="@+id/text_21"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="10dp"
+		    android:clickable="true"
+		    android:gravity="center_vertical"
+		    android:paddingLeft="@dimen/bianju_settings_item" 
+		    android:text="对方为你所设闹钟"
+		    android:textColor="@color/black"
+		    android:textSize="@dimen/content_fontsize" 
+		    android:layout_centerVertical="true"
+		    android:visibility="gone"/>
+        <TextView
+	        android:id="@+id/text_23"
+		    android:layout_width="wrap_content"
+		    android:layout_height="80dp"
+		    android:layout_marginTop="10dp"
+		    android:clickable="true"
+		    android:gravity="center_vertical"
+		    android:paddingLeft="@dimen/bianju_settings_item" 
+		    android:text="闹钟，对方暂未为你设定"
+		    android:textColor="@color/black"
+		    android:textSize="@dimen/content_fontsize" 
+		    android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/rl_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="36dp"
+        android:paddingBottom="5dp"
+        android:layout_below="@id/alarm_tip_2"
+        android:visibility="gone"
+        >
+	    <RelativeLayout
+	        android:id="@+id/ll_2"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:onClick="onClick"
+	        android:layout_below="@id/alarm_tip_2"
+	       >
+	     
+	     <TextView
+	         android:id="@+id/date_2"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_alignParentLeft="true"
+	         android:layout_marginLeft="10dp"
+	         android:layout_alignBottom="@+id/time_2"
+	         android:text="明天"
+	         android:textColor="@color/black"
+	         android:textSize="@dimen/content_fontsize" />
+	     <TextView
+	         android:id="@id/time_2"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_toRightOf="@id/date_2"	   
+	         android:paddingLeft="5dp" 
+	         android:text="08:00"
+	         android:textColor="@color/black"
+	         android:textSize="25sp" />
+	
+	        <TextView
+	        android:id="@+id/text_22"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="* 帮我买早餐"
+		    android:textColor="@color/black"
+		    android:textSize="@dimen/content_fontsize" 
+		    android:layout_below="@id/date_2"
+		    android:layout_marginBottom="5dp"
+		    android:layout_alignLeft="@id/date_2"
+		    android:layout_marginTop="3dp"/>
+	   </RelativeLayout>
+   
+	    <ToggleButton
+	         android:id="@+id/but_preview_2"
+	         android:layout_width="70dp"
+	         android:layout_height="45dp"
+	         android:layout_alignParentRight="true"
+		     android:layout_marginRight="10dp"
+		     android:textOn=""
+		     android:textOff=""
+	         android:background="@drawable/togglebutton_selector"/>
+      </LinearLayout>
+</RelativeLayout>

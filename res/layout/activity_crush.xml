@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- @author:DengRenbin -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:text="TA的手机号码"
+        android:textColor="@color/black"
+        android:textSize="@dimen/fontsize_large" />
+
+    <EditText
+        android:id="@+id/edt_crush_phoneNum"
+        android:layout_width="200dp"
+        android:layout_height="25dp"
+        android:background="@color/touming"
+        android:gravity="center_horizontal|bottom"
+        android:phoneNumber="true"
+        android:text="15008271054"
+        android:textColor="@color/black"
+        android:textSize="@dimen/fontsize_large" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_line_cu"
+        android:layout_marginBottom="100dp"
+        layout="@layout/layout_line_cu" >
+    </include>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:text="需要附带一句话？\n（不超过20字）"
+        android:textColor="@color/black"
+        android:textSize="@dimen/fontsize_small" />
+
+    <EditText
+        android:id="@+id/edt_crush_somewords"
+        android:layout_width="200dp"
+        android:layout_height="25dp"
+        android:background="@color/touming"
+        android:textColor="@color/black"
+        android:textSize="@dimen/fontsize_normal" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_line_cu"
+        android:layout_marginBottom="80dp"
+        layout="@layout/layout_line_cu" >
+    </include>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_crush_return"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_btn"
+            android:background="@drawable/btn_ocean_selector"
+            android:gravity="center"
+            android:text="    取消    "
+            android:textColor="@color/black"
+            android:textSize="@dimen/fontsize_normal" />
+
+        <Button
+            android:id="@+id/btn_crush_send"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_btn"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/btn_ocean_selector"
+            android:gravity="center"
+            android:text="    发送    "
+            android:textColor="@color/black"
+            android:textSize="@dimen/fontsize_normal" />
+    </LinearLayout>
+
+</LinearLayout>
