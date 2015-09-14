@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.easemob.util.HanziToPinyin;
 import com.xicheng.trid.Constant;
@@ -18,10 +19,12 @@ import com.xicheng.trid.hx.domain.InviteMessage;
 import com.xicheng.trid.hx.domain.RobotUser;
 import com.xicheng.trid.hx.domain.User;
 import com.xicheng.trid.hx.domain.InviteMessage.InviteMesageStatus;
+import com.xicheng.trid.value.ConnInfo;
 
 public class DemoDBManager {
     static private DemoDBManager dbMgr = new DemoDBManager();
     private DbOpenHelper dbHelper;
+    private static final String TAG = "DemoDBManager";
     
     void onInit(Context context){
         dbHelper = DbOpenHelper.getInstance(context);
@@ -31,6 +34,47 @@ public class DemoDBManager {
         return dbMgr;
     }
     
+    /**
+     * 保存本地设置
+     * 
+     * @param settingsList
+     */
+    synchronized public void saveSettingsList(List<Map<String,Integer>> settingsList){
+    	SQLiteDatabase db = dbHelper.getWritableDatabase();
+    	ContentValues values = new ContentValues();
+    	for(Map<String, Integer> setting : settingsList){
+    		values.put(UserDao.SETTINGS_COLUMN_NAME_ID, setting.get(UserDao.SETTINGS_COLUMN_NAME_ID));
+    		values.put(UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME, setting.get(UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME));
+    		values.put(UserDao.SETTINGS_COLUMN_NAME_STATUS, setting.get(UserDao.SETTINGS_COLUMN_NAME_STATUS));
+    		if(db.isOpen()){
+    			db.replace(UserDao.SETTINGS_TABLE_NAME, null, values);
+    			Log.i(TAG, UserDao.SETTINGS_COLUMN_NAME_ID + "=" + values.getAsString(UserDao.SETTINGS_COLUMN_NAME_ID) + ";\n" +
+    					UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME + "=" + values.getAsString(UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME) + ";\n" +
+    					UserDao.SETTINGS_COLUMN_NAME_STATUS + "=" + values.getAsInteger(UserDao.SETTINGS_COLUMN_NAME_STATUS) + ";");
+    		}
+    	}
+    }
+    /**
+     * 获取本地设置
+     * @return
+     */
+    public List<Map<String, Integer>> getSettingsList(){
+    	SQLiteDatabase db = dbHelper.getWritableDatabase();
+    	List<Map<String, Integer>> result = new ArrayList<Map<String, Integer>>();
+    	if(db.isOpen()){
+    		Cursor cursor = db.rawQuery("select * from " + UserDao.SETTINGS_TABLE_NAME 
+    				+ " where " + UserDao.SETTINGS_COLUMN_NAME_ID + "=" + ConnInfo.TEL, null);
+    		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
+    		while (cursor.moveToNext()){
+    			String settingName = cursor.getString(cursor.getColumnIndex(UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME));
+    			Integer value = cursor.getInt(cursor.getColumnIndex(UserDao.SETTINGS_COLUMN_NAME_STATUS));
+    			hmap.put(settingName, value);
+    			result.add(hmap);
+    		}
+    	}
+		return result;
+	}
+
     /**
      * 保存好友list
      * 
