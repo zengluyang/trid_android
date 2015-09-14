@@ -1,0 +1,199 @@
+<!-- @author:DengRenbin-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background" >
+    
+    <!-- 顶部标题栏 -->
+    <RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="@dimen/top_layout_height"
+	    android:background="@color/touming"
+	    android:gravity="center_vertical"
+	    android:orientation="horizontal" >
+	    <ImageButton
+	        android:contentDescription="@string/app_name"
+	        android:id="@+id/imagebutton_settings_tongyong_fanhui"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentStart="true"
+	        android:layout_marginLeft="@dimen/top_bian_ju"
+	        android:layout_marginStart="@dimen/top_bian_ju"
+	        android:background="@color/touming"
+	        android:src="@drawable/fanhui" />
+	    
+	    <!-- pagenameTextView -->
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:gravity="center"
+	        android:layout_centerHorizontal="true"
+	        android:background="@color/touming"
+	        android:text="@string/tong_yong"
+	        android:textSize="@dimen/fontsize_large" 
+	        android:textColor="@color/black"/>
+	</RelativeLayout>
+	
+	<!-- 各项设置布局 -->
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+	    <!-- 分隔线 -->
+	    <include layout="@layout/layout_line_long" />
+	    
+	    <!-- 语言切换 -->
+	    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_settings_item"
+            android:orientation="horizontal">
+	        <TextView
+	            android:layout_width="0dp"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:background="@color/touming"
+	            android:gravity="center_vertical"
+	            android:paddingLeft="@dimen/bianju_settings_item"
+	            android:text="语言切换"
+	            android:textColor="@color/black"
+	            android:textSize="@dimen/content_fontsize" />
+	        <TextView 
+	            android:id="@+id/textview_settings_tongyong_yuyan_zhongwen"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:text="@string/zhong_wen"
+	            android:textColor="@color/gray"
+	            android:textSize="@dimen/content_fontsize"
+	            />
+	        <TextView 
+	            android:id="@+id/textview_settings_tongyong_yuyan_English"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:text="@string/english"
+	            android:paddingLeft="15dp"
+	            android:paddingRight="@dimen/bianju_settings_item"
+	            android:textColor="@color/gray"
+	            android:textSize="@dimen/content_fontsize"
+	            />
+        </LinearLayout>
+        
+        <!-- 绘制分隔线 -->
+        <include layout="@layout/layout_line_short" />
+        
+        <!-- 字体大小 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_settings_item"
+            android:orientation="horizontal">
+	        <TextView
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:layout_weight="1"
+	            android:background="@color/touming"
+	            android:gravity="center_vertical"
+	            android:paddingLeft="@dimen/bianju_settings_item"
+	            android:text="字体大小"
+	            android:textColor="@color/black"
+	            android:textSize="@dimen/content_fontsize" />
+	        <TextView 
+	            android:id="@+id/textview_settings_tongyong_fontsize_xiao"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:text="小"
+	            android:textColor="@color/gray"
+	            android:textSize="@dimen/fontsize_small"
+	            />
+	        <TextView 
+	            android:id="@+id/textview_settings_tongyong_fontsize_zhong"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:text="标准"
+	            android:paddingLeft="15dp"
+	            android:textColor="@color/gray"
+	            android:textSize="@dimen/fontsize_normal"
+	            />
+	        <TextView 
+	            android:id="@+id/textview_settings_tongyong_fontsize_da"
+	            android:layout_width="wrap_content"
+	            android:layout_height="match_parent"
+	            android:gravity="center_vertical"
+	            android:text="大"
+	            android:paddingLeft="15dp"
+	            android:paddingRight="@dimen/bianju_settings_item"
+	            android:textColor="@color/gray"
+	            android:textSize="@dimen/large_fontsize"
+	            />
+        </LinearLayout>
+        
+        <!-- 分隔线 -->
+        <include layout="@layout/layout_line_long" />
+        
+        <!-- 分隔线 -->
+        <include
+            layout="@layout/layout_line_long"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_line"
+            android:layout_marginTop="20dp" />
+        
+        <!-- 三天小站 -->
+        <TextView
+            android:id="@+id/textview_settings_tongyong_STXZ"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_settings_item"
+            android:clickable="true"
+            android:drawableRight="@drawable/submenu"
+            android:drawableEnd="@drawable/submenu"
+            android:background="@drawable/item_selector"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/bianju_settings_item"
+            android:paddingRight="@dimen/bianju_settings_item"
+            android:text="三天小站"
+            android:textColor="@color/black"
+            android:textSize="@dimen/content_fontsize" />
+        
+        <!-- 分隔线 -->
+        <include layout="@layout/layout_line_long" />
+        <!-- 解释三天小站 -->
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/bianju_settings_item"
+            android:paddingRight="@dimen/bianju_settings_item"
+            android:background="@drawable/item_selector"
+            android:text="@string/san_tian_xiao_zhan"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/fontsize_xsmall" />
+        <!-- 分隔线 -->
+        <include
+            layout="@layout/layout_line_long"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_line"
+            android:layout_marginTop="20dp" />
+        
+        <TextView
+            android:id="@+id/textview_settings_tongyong_GYST"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height_settings_item"
+            android:background="@color/touming"
+            android:clickable="true"
+            android:drawableRight="@drawable/submenu"
+            android:drawableEnd="@drawable/submenu"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/bianju_settings_item"
+            android:paddingRight="@dimen/bianju_settings_item"
+            android:text="关于三天"
+            android:textColor="@color/black"
+            android:textSize="@dimen/content_fontsize" />
+        
+        <!-- 分隔线 -->
+        <include layout="@layout/layout_line_long" />
+    </LinearLayout>
+</LinearLayout>

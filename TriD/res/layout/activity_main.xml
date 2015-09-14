@@ -1,0 +1,22 @@
+<!-- @author:DengRenbin-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical" >
+    
+    <include layout="@layout/layout_main_top" />
+    <include
+        android:id="@+id/rl_error_item"
+        layout="@layout/chat_neterror_item"
+        android:visibility="gone" />
+    <!-- 中部显示聊天信息部分 -->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+    <include layout="@layout/layout_main_bottom"/>
+</LinearLayout>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    >
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_weight = "1"
+        android:layout_height="0dp"
+        android:text="设定成功!" 
+        android:gravity = "center"
+        android:textSize="25dp"
+        android:layout_gravity="center"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_weight = "1"
+        android:layout_height="0dp"
+        android:layout_gravity="center">
+        <TextView
+            android:id="@+id/text_con_11"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="提醒事项："
+            android:textSize="20dp"/>
+        <TextView
+            android:id="@+id/text_con_12"
+            android:layout_toRightOf="@id/text_con_11"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="买早餐"
+            android:layout_marginLeft="10dp"
+            android:textSize="20dp"/>
+         <TextView
+            android:layout_below="@id/text_con_11"
+            android:layout_marginTop="8dp"
+            android:layout_alignLeft="@id/text_con_11"
+            android:id="@+id/text_con_21"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="提醒时间："
+            android:textSize="20dp"/>
+        <TextView
+            android:id="@+id/text_con_22"
+            android:layout_toRightOf="@id/text_con_21"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_alignBottom="@id/text_con_21"
+            android:text="8：00"
+            android:layout_marginLeft="10dp"
+            android:textSize="20dp"/>
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_weight = "1"
+        android:layout_height="0dp"
+        android:orientation="horizontal" 
+        android:gravity="center"
+        >
+
+        <Button
+            android:id="@+id/btn_con_cancel"
+            android:layout_width="80dp"
+            android:layout_height="@dimen/height_btn"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_ocean_selector"
+            android:text="取消"
+            android:textSize="@dimen/fontsize_normal" />
+
+         <Button
+             android:id="@+id/btn_con_sure"
+             android:layout_width="80dp"
+             android:layout_height="@dimen/height_btn"
+             android:layout_gravity="center"
+             android:layout_marginLeft="30dp"
+             
+             android:background="@drawable/btn_ocean_selector"
+             android:text="确认"
+             android:onClick="requestSetAlarm"
+             android:textSize="@dimen/fontsize_normal" />
+
+    </LinearLayout>
+
+</LinearLayout>
