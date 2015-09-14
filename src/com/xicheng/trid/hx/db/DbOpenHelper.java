@@ -73,7 +73,7 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 			+ UserDao.SETTINGS_COLUMN_NAME_ID + " TEXT, "
 			+ UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME + " TEXT, "
 			+ UserDao.SETTINGS_COLUMN_NAME_STATUS + " INT, "
-			+ "constranint pk_settings primary key ("
+			+ "constraint pk_settings primary key ("
 			+ UserDao.SETTINGS_COLUMN_NAME_ID + ","
 			+ UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME + "));";
 	
@@ -101,7 +101,6 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 		//db.execSQL(CREATE_NOTES_TABLE);
 		db.execSQL(CREATE_ALARM_TABLE);
 		db.execSQL(CREATE_SETTINGS_TABLE);//创建本地设置表
-		
 	}
 	
 	

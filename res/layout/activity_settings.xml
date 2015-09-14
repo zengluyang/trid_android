@@ -129,7 +129,7 @@
 	            android:textColor="@color/black"
 	            android:textSize="@dimen/content_fontsize" />
             <ImageButton
-	            android:id="@+id/jie_shou_an_lian"
+	            android:id="@+id/onoff_receive_crush"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -159,7 +159,7 @@
 	            android:textColor="@color/black"
 	            android:textSize="@dimen/content_fontsize" />
             <ImageButton
-	            android:id="@+id/ji_shi_she_jiao"
+	            android:id="@+id/onoff_immediately_chat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -22,6 +22,7 @@ import android.content.Context;
 import com.xicheng.trid.chat_alarm.ChatAlarm;
 import com.xicheng.trid.hx.domain.RobotUser;
 import com.xicheng.trid.hx.domain.User;
+import com.xicheng.trid.settings.Setting;
 /**
  *DAO实现类   ，实现了contact相关的数据库操作
  *如果要操作数据，则新建一个该对象，然后调用相应方法
@@ -58,7 +59,7 @@ public class UserDao {
 	
 	// settings相关常量
 	public static final String SETTINGS_TABLE_NAME = "settings";
-	public static final String SETTINGS_COLUMN_NAME_ID = "username";
+	public static final String SETTINGS_COLUMN_NAME_ID = "user_id";
 	public static final String SETTINGS_COLUMN_NAME_SETTINGNAME = "setting_name";
 	public static final String SETTINGS_COLUMN_NAME_STATUS = "status";
 	
@@ -70,14 +71,14 @@ public class UserDao {
 	 * 
 	 * @param settingsList
 	 */
-	public void saveSettings(List<Map<String,Integer>> settingsList){
+	public void saveSettings(List<Setting> settingsList){
 		DemoDBManager.getInstance().saveSettingsList(settingsList);
 	}
 	/**
 	 * 获取本地设置
 	 * @return
 	 */
-	public List<Map<String, Integer>> getSettingsList(){
+	public List<Setting> getSettingsList(){
 		return DemoDBManager.getInstance().getSettingsList();
 	}
 
