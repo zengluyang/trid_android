@@ -15,7 +15,7 @@
 	    android:orientation="horizontal" >
 	    <ImageButton
 	        android:contentDescription="@string/app_name"
-	        android:id="@+id/imagebutton_settings_news_fanhui"
+	        android:id="@+id/imabtn_settings_news_return"
 	        android:layout_width="wrap_content"
 	        android:layout_height="match_parent"
 	        android:layout_alignParentLeft="true"
@@ -57,7 +57,7 @@
 	        android:textColor="@color/black"
 	        android:textSize="@dimen/content_fontsize" />
       	<ImageButton
-	        android:id="@+id/imagebutton_settings_news_jieshou"
+	        android:id="@+id/imabtn_settings_news_receiveMessage"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center"
@@ -92,7 +92,7 @@
 			android:textColor="@color/black"
 			android:textSize="@dimen/content_fontsize" />
 		<ImageButton
-			android:id="@+id/imagebutton_settings_news_voice"
+			android:id="@+id/imabtn_settings_news_voice"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
@@ -121,7 +121,7 @@
 			android:textColor="@color/black"
 			android:textSize="@dimen/content_fontsize" />
 		<ImageButton
-			android:id="@+id/imagebutton_settings_news_vibrance"
+			android:id="@+id/imabtn_settings_news_vibrance"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"

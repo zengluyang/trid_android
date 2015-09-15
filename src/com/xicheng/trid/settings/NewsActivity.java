@@ -1,103 +1,82 @@
 package com.xicheng.trid.settings;
 
-import com.xicheng.trid.R;
-import com.xicheng.trid.value.ConnInfo;
-
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+
+import com.xicheng.trid.R;
+import com.xicheng.trid.hx.db.UserDao;
+import com.xicheng.trid.value.FinalValue;
+
 /**
  * 
  * @author DengRenbin
- *
+ * 
  */
-public class NewsActivity extends Activity{
-	private ImageButton jieShou;
+public class NewsActivity extends Activity {
+	private ImageButton receiveMessage;
 	private ImageButton voice;
 	private ImageButton vibrance;
-	private ImageButton fanhui;
+	private ImageButton imabtn_return;
 
-	private SharedPreferences spref;
-	private Editor editor;
-	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings_news);
-		spref = getSharedPreferences("settings_data"+ConnInfo.TEL, MODE_PRIVATE);
-		editor = spref.edit();
-		//接收消息通知
-		jieShou = (ImageButton) findViewById(R.id.imagebutton_settings_news_jieshou);
-		boolean data = spref.getBoolean("jie_shou_tong_zhi", true);
-		if(data){
-			jieShou.setImageResource(R.drawable.kaiguan_on);
-		} else {
-			jieShou.setImageResource(R.drawable.kaiguan_off);
-		}
-		jieShou.setOnClickListener(new OnClickListener() {
+		receiveMessage = (ImageButton) findViewById(R.id.imabtn_settings_news_receiveMessage);
+		voice = (ImageButton) findViewById(R.id.imabtn_settings_news_voice);
+		vibrance = (ImageButton) findViewById(R.id.imabtn_settings_news_vibrance);
+		imabtn_return = (ImageButton) findViewById(R.id.imabtn_settings_news_return);
+
+		// 获取设置数据
+		Setting settingReceiveMessage = Setting
+				.getSetting(Setting.SETTINGNAME_RECEIVE_MESSAGE);
+		Setting settingVoice = Setting.getSetting(Setting.SETTINGNAME_VOICE);
+		Setting settingVibrance = Setting
+				.getSetting(Setting.SETTINGNAME_VIBRANCE);
+		Setting.load(settingReceiveMessage, receiveMessage);
+		Setting.load(settingVoice, voice);
+		Setting.load(settingVibrance, vibrance);
+
+		// 接收消息
+		receiveMessage.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				boolean data = spref.getBoolean("jie_shou_tong_zhi", true);
-				if(data){
-					editor.putBoolean("jie_shou_tong_zhi", false);
-					editor.commit();
-					jieShou.setImageResource(R.drawable.kaiguan_off);
-				} else {
-					editor.putBoolean("jie_shou_tong_zhi", true);
-					editor.commit();
-					jieShou.setImageResource(R.drawable.kaiguan_on);
-				}
+				Setting settingReceiveMessage = Setting
+						.getSetting(Setting.SETTINGNAME_RECEIVE_MESSAGE);
+				settingReceiveMessage.setStatus(FinalValue.TRUE
+						- settingReceiveMessage.getStatus());
+				Setting.load(settingReceiveMessage, receiveMessage);
+				new UserDao(NewsActivity.this)
+						.saveSettings(Setting.settingsList);
 			}
 		});
-		//声音
-		voice = (ImageButton) findViewById(R.id.imagebutton_settings_news_voice);
-		data = spref.getBoolean("jie_shou_voice", true);
-		if(data){
-			voice.setImageResource(R.drawable.kaiguan_on);
-		} else {
-			voice.setImageResource(R.drawable.kaiguan_off);
-		}
+		// 声音
 		voice.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				boolean data = spref.getBoolean("jie_shou_voice", true);
-				if(data){
-					editor.putBoolean("jie_shou_voice", false);
-					editor.commit();
-					voice.setImageResource(R.drawable.kaiguan_off);
-				} else {
-					editor.putBoolean("jie_shou_voice", true);
-					editor.commit();
-					voice.setImageResource(R.drawable.kaiguan_on);
-				}
+				Setting settingVoice = Setting
+						.getSetting(Setting.SETTINGNAME_VOICE);
+				settingVoice.setStatus(FinalValue.TRUE
+						- settingVoice.getStatus());
+				Setting.load(settingVoice, voice);
+				new UserDao(NewsActivity.this)
+						.saveSettings(Setting.settingsList);
 			}
 		});
-		//振动
-		vibrance = (ImageButton) findViewById(R.id.imagebutton_settings_news_vibrance);
-		data = spref.getBoolean("jie_shou_vibrance", true);
-		if(data){
-			vibrance.setImageResource(R.drawable.kaiguan_on);
-		} else {
-			vibrance.setImageResource(R.drawable.kaiguan_off);
-		}
+		// 振动
 		vibrance.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				boolean data = spref.getBoolean("jie_shou_vibrance", true);
-				if(data){
-					editor.putBoolean("jie_shou_vibrance", false);
-					editor.commit();
-					vibrance.setImageResource(R.drawable.kaiguan_off);
-				} else {
-					editor.putBoolean("jie_shou_vibrance", true);
-					editor.commit();
-					vibrance.setImageResource(R.drawable.kaiguan_on);
-				}
+				Setting settingVibrance = Setting
+						.getSetting(Setting.SETTINGNAME_RECEIVE_MESSAGE);
+				settingVibrance.setStatus(FinalValue.TRUE
+						- settingVibrance.getStatus());
+				Setting.load(settingVibrance, vibrance);
+				new UserDao(NewsActivity.this)
+						.saveSettings(Setting.settingsList);
 			}
 		});
-		//返回键
-		fanhui = (ImageButton) findViewById(R.id.imagebutton_settings_news_fanhui);
-		fanhui.setOnClickListener(new OnClickListener() {
+		// 返回键
+		imabtn_return.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				finish();
 			}
