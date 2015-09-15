@@ -2,27 +2,27 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="273" key="DIALOG_WIDTH"/>
-		<item value="355" key="DIALOG_Y_ORIGIN"/>
-		<item value="893" key="DIALOG_X_ORIGIN"/>
+		<item value="300" key="DIALOG_Y_ORIGIN"/>
 		<item value="381" key="DIALOG_HEIGHT"/>
+		<item value="406" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Microsoft YaHei UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Microsoft YaHei UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="casesensitive"/>
 		<item value="false" key="isRegEx"/>
+		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="HISTORY" key="selection"/>
+		<item value="refresh" key="selection"/>
 		<list key="findhistory">
+			<item value="refresh"/>
+			<item value="ADD_FRIEND_REQUEST"/>
+			<item value="HttpUtil"/>
+			<item value="conversation"/>
+			<item value="post_request"/>
 			<item value="history"/>
 			<item value="chatType"/>
 			<item value="listView"/>
-			<item value="more"/>
-			<item value="btn_more"/>
-			<item value="btn_set_mode_keyboard)"/>
-			<item value="et_sendmessage"/>
-			<item value="mic_image"/>
 		</list>
 		<list key="replacehistory">
 		</list>

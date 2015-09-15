@@ -133,10 +133,13 @@ public class JsonParser {
 			switch(msg.getType()){
 				case TXT:
 					Log.i(TAG,((TextMessageBody)msBody).getMessage());
+					break;
 				case IMAGE:
 					Log.i(TAG,((ImageMessageBody)msBody).getThumbnailUrl());
+					break;
 				case VOICE:
 					Log.i(TAG, ((VoiceMessageBody)msBody).getLength()+"");
+					break;
 				default:
 					break;
 			}
