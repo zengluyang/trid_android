@@ -23,7 +23,7 @@ import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.utils.MyCountDownTimer;
 import com.xicheng.trid.value.ConnInfo;
 import com.xicheng.trid.value.RequestUrlValue;
-import com.xicheng.trid.value.ResponseTypeValue;
+import com.xicheng.trid.value.ResultTypeValue;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -143,7 +143,7 @@ public class LoginActivity extends BaseActivity {
 	 */
 	protected void handleResult(JSONObject obj) {
 		try {
-			if (obj.getString("type").equals(ResponseTypeValue.SMS_VALIDATION_RESULT)) {
+			if (obj.getString("type").equals(ResultTypeValue.SMS_VALIDATION_RESULT)) {
 				// 是验证码验证请求的返回值
 				if (obj.getBoolean("success")) {
 					// 验证成功，保存联网数据并登陆
@@ -169,7 +169,7 @@ public class LoginActivity extends BaseActivity {
 					Log.i(TAG, "验证失败");
 					Toast.makeText(getApplicationContext(), "短信验证码验证失败，请重新验证", Toast.LENGTH_SHORT).show();
 				}
-			} else if (obj.getString("type").equals(ResponseTypeValue.SMS_VALIDATION_SEND)) {
+			} else if (obj.getString("type").equals(ResultTypeValue.SMS_VALIDATION_SEND)) {
 				// 是请求短信验证码的返回值
 				if (obj.getBoolean("success")) {
 					// 获取成功
@@ -250,7 +250,8 @@ public class LoginActivity extends BaseActivity {
 	
 	
 	/**
-	 * 查看数据库中是否有联系人信息，没有则请求并保存到本地数据库*/
+	 * 查看数据库中是否有联系人信息，没有则请求并保存到本地数据库
+	 */
 	private void initializeContacts(String tel,String token) {
 		Map<String, User> userlist = new HashMap<String, User>();
 		UserDao dao = new UserDao(LoginActivity.this);

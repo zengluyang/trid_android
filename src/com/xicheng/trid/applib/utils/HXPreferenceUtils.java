@@ -31,9 +31,9 @@ public class HXPreferenceUtils {
 	private String SHARED_KEY_SETTING_SPEAKER = "shared_key_setting_speaker";
 
 	private static String SHARED_KEY_SETTING_CHATROOM_OWNER_LEAVE = "shared_key_setting_chatroom_owner_leave";
-	private static String SHARED_KEY_SETTING_GROUPS_SYNCED = "SHARED_KEY_SETTING_GROUPS_SYNCED";
-	private static String SHARED_KEY_SETTING_CONTACT_SYNCED = "SHARED_KEY_SETTING_CONTACT_SYNCED";
-	private static String SHARED_KEY_SETTING_BALCKLIST_SYNCED = "SHARED_KEY_SETTING_BALCKLIST_SYNCED";
+	private static String SHARED_KEY_SETTING_GROUPS_SYNCED = "shared_key_setting_groups_synced";
+	private static String SHARED_KEY_SETTING_CONTACT_SYNCED = "shared_key_setting_contact_synced";
+	private static String SHARED_KEY_SETTING_BALCKLIST_SYNCED = "shared_key_setting_balcklist_synced";
 	
 	private HXPreferenceUtils(Context cxt) {
 		mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);

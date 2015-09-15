@@ -18,7 +18,7 @@ import com.xicheng.trid.hx.domain.User;
 import com.xicheng.trid.json.AddFriendRequest;
 import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.value.RequestUrlValue;
-import com.xicheng.trid.value.ResponseTypeValue;
+import com.xicheng.trid.value.ResultTypeValue;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -76,7 +76,7 @@ public class CrushActivity extends BaseActivity {
 	@Override
 	protected void handleResult(JSONObject obj) {
 		try {
-			if (obj.getString("type").equals(ResponseTypeValue.ADD_FRIEND_RESULT)) {
+			if (obj.getString("type").equals(ResultTypeValue.ADD_FRIEND_RESULT)) {
 				if (obj.getBoolean("success")) {
 					JSONObject friend = obj.getJSONObject("friend");
 					//存入该联系人信息到数据库库
@@ -128,7 +128,7 @@ public class CrushActivity extends BaseActivity {
 						Toast.makeText(getApplicationContext(), "发生了错误", Toast.LENGTH_SHORT).show();
 						break;
 					}
-			} else if (obj.getString("type").equals(ResponseTypeValue.SEND_INVITATION_RESULT)) {
+			} else if (obj.getString("type").equals(ResultTypeValue.SEND_INVITATION_RESULT)) {
 				if (obj.getBoolean("success")) {
 					Toast.makeText(getApplicationContext(), "短信发送成功", Toast.LENGTH_SHORT).show();
 				} else {

@@ -1,6 +1,6 @@
 package com.xicheng.trid.value;
 
-public class ResponseTypeValue {
+public class ResultTypeValue {
 	// 添加好友
 	public static final String ADD_FRIEND_RESULT = "add_friend_result";
 	// 上传基本信息

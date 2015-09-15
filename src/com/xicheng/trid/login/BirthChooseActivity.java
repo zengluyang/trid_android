@@ -11,7 +11,7 @@ import com.xicheng.trid.json.Birthdate;
 import com.xicheng.trid.main.MainActivity;
 import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.value.RequestUrlValue;
-import com.xicheng.trid.value.ResponseTypeValue;
+import com.xicheng.trid.value.ResultTypeValue;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,7 +62,7 @@ public class BirthChooseActivity extends BaseActivity {
 	 */
 	protected void handleResult(JSONObject obj) {
 		try {
-			if(obj.getString("type").equals(ResponseTypeValue.BASIC_INFO_UPLOAD_RESULT)){
+			if(obj.getString("type").equals(ResultTypeValue.BASIC_INFO_UPLOAD_RESULT)){
 				if(obj.getBoolean("success")){
 					//基本信息上传成功
 					Intent intent = new Intent(BirthChooseActivity.this, MainActivity.class);

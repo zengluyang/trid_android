@@ -70,12 +70,8 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 	// settings table
 	private static final String CREATE_SETTINGS_TABLE = "CREATE TABLE "
 			+ UserDao.SETTINGS_TABLE_NAME + " ("
-			+ UserDao.SETTINGS_COLUMN_NAME_ID + " TEXT, "
-			+ UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME + " TEXT, "
-			+ UserDao.SETTINGS_COLUMN_NAME_STATUS + " INT, "
-			+ "constraint pk_settings primary key ("
-			+ UserDao.SETTINGS_COLUMN_NAME_ID + ","
-			+ UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME + "));";
+			+ UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME + " TEXT PRIMARY KEY, "
+			+ UserDao.SETTINGS_COLUMN_NAME_STATUS + " INT);";
 	
 	private DbOpenHelper(Context context) {
 		super(context, getUserDatabaseName(), null, DATABASE_VERSION);

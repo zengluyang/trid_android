@@ -36,7 +36,7 @@ import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.utils.PicUtil;
 import com.xicheng.trid.value.ConnInfo;
 import com.xicheng.trid.value.RequestUrlValue;
-import com.xicheng.trid.value.ResponseTypeValue;
+import com.xicheng.trid.value.ResultTypeValue;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -648,7 +648,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	// 处理服务器返回的JSONObject对象
 	protected void handleResult(JSONObject obj) {
 		try {
-			if (obj.getString("type").equals(ResponseTypeValue.PF_PICTURE_RESULT)) {
+			if (obj.getString("type").equals(ResultTypeValue.PF_PICTURE_RESULT)) {
 				// 处理二选一图片请求返回值
 				if (obj.getBoolean("success")) {
 					PicUtil.handlePfPictureResult(obj, this);

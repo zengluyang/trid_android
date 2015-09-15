@@ -16,7 +16,6 @@ import com.xicheng.trid.chat_alarm.ChatAlarm;
 import com.xicheng.trid.hx.domain.RobotUser;
 import com.xicheng.trid.hx.domain.User;
 import com.xicheng.trid.settings.Setting;
-import com.xicheng.trid.value.ConnInfo;
 
 public class DemoDBManager {
 	static private DemoDBManager dbMgr = new DemoDBManager();
@@ -39,7 +38,6 @@ public class DemoDBManager {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		for (Setting setting : settingsList) {
-			values.put(UserDao.SETTINGS_COLUMN_NAME_ID, ConnInfo.TEL);
 			values.put(UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME,
 					setting.getSettingName());
 			values.put(UserDao.SETTINGS_COLUMN_NAME_STATUS, setting.getStatus());
@@ -53,15 +51,14 @@ public class DemoDBManager {
 	 * 获取本地设置
 	 * 
 	 * @return
+	 * <List<Setting>
 	 */
 	public List<Setting> getSettingsList() {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		List<Setting> result = new ArrayList<Setting>();
 		if (db.isOpen()) {
 			Cursor cursor = db.rawQuery("select * from "
-					+ UserDao.SETTINGS_TABLE_NAME + " where "
-					+ UserDao.SETTINGS_COLUMN_NAME_ID + "='" + ConnInfo.TEL
-					+ "'", null);
+					+ UserDao.SETTINGS_TABLE_NAME, null);
 			Setting setting;
 			while (cursor.moveToNext()) {
 				String settingName = cursor
@@ -72,6 +69,7 @@ public class DemoDBManager {
 				setting = new Setting(settingName, status);
 				result.add(setting);
 			}
+			cursor.close();
 		}
 		return result;
 	}
