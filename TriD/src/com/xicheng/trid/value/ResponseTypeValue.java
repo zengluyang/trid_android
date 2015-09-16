@@ -19,4 +19,6 @@ public class ResponseTypeValue {
 	public static final String SMS_VALIDATION_SEND = "sms_validation_send";
 	// 获取历史记录
 	public static final String SMS_HISTORY="get_chat_record_per_conversation";
+	//错误码
+	public static final int INTENT_ERROR=404;
 }

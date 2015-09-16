@@ -1,15 +1,19 @@
 package com.xicheng.trid.utils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+
+import com.xicheng.trid.value.ResponseTypeValue;
 
 import android.os.Handler;
 import android.os.Message;
@@ -22,57 +26,112 @@ import android.util.Log;
  */
 public class HttpUtil {
 	public static Handler currentHandler;
-
+	
 	public static void postRequest(final String url, final String json) {
 		new Thread(new Runnable() {
-
 			@Override
-			public void run() {
-				try {
-					HttpClient httpclient = new DefaultHttpClient();
-					HttpPost httppost = new HttpPost(url);
-
-//					Handler currentHandler = HttpUtil.currentHandler;
-					// httppost.addHeader("Authorization", "your token"); //
-					// ��֤token
-
-					httppost.addHeader("Content-Type", "application/json");
-					Log.i("HttpUtil", "will post this data:" + json);
-
-					httppost.setEntity(new StringEntity(json));
-					HttpResponse response = httpclient.execute(httppost);
-					
-//					Log.i("HttpUtil", "post成功");
-					// ����״̬�룬���ɹ��������
-					int code = response.getStatusLine().getStatusCode();
-					if (code == HttpStatus.SC_OK) {
-
-						String result = EntityUtils.toString(response.getEntity());
-						Log.i("HttpUtil","result: "+result);
-						if (currentHandler != null) {
-							sendHandlerMsg(result, currentHandler);
-//							Log.i("HttpUtil", "sendHsndlerMsg成功");
-						}
-
-					} else {
-						Log.i("HttpUtil", "post false");
-					}
-				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+			public void run() {	
+					String responseStr=getReponseString(url,json);
+					if(currentHandler!=null)
+						sendHandlerMsg(responseStr, currentHandler);
+			}	
 		}).start();
-
+	}
+	/**
+	 * 获取服务器返回字符串，针对不同的异常问题，返回不同的错误信息
+	 * @param url
+	 * @param json
+	 * @return
+	 */
+	private static String getReponseString(final String url,final String json){
+		HttpClient mHttpClient=GetHttpClient.getInstance();
+		HttpPost post=BuildPost(url,json);
+		if(mHttpClient!=null){
+			if(post!=null){
+				String result=getSeverResponse(mHttpClient,post);
+				if(result!=null){
+					return result;
+				}
+				else
+					return "connect_timeout";
+			}
+			else
+				return "PostError";
+		}
+		else
+			return "InterNetError";
+	}
+	
+	/**
+	 * 得到服务器返回字符串
+	 * @param mHttpClient
+	 * @param post
+	 * @return
+	 */
+	private static String getSeverResponse(HttpClient mHttpClient, HttpPost post) {
+		HttpResponse response;
+		String result = null;
+		try {
+			response = mHttpClient.execute(post);
+			int code = response.getStatusLine().getStatusCode();
+			if (code == HttpStatus.SC_OK) {
+				result = EntityUtils.toString(response.getEntity());
+				Log.i("HttpUtil","result: "+result);
+			} else {
+				Log.i("HttpUtil", "post false");
+			}
+		} catch (ClientProtocolException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		return result;
+	}
+	/**
+	 * 设置post表单参数
+	 * @param url
+	 * @param json
+	 * @return
+	 */
+	private static HttpPost BuildPost(String url,String json) {
+		HttpPost httppost = new HttpPost(url);
+		httppost.addHeader("Content-Type", "application/json");
+		Log.i("HttpUtil", "will post this data:" + json);
+		try {
+			httppost.setEntity(new StringEntity(json));
+		} catch (UnsupportedEncodingException e) {			
+			e.printStackTrace();
+		}
+		return httppost;
+	}
+	/**
+	 * 用于判断是否请求失败
+	 * @param str
+	 * @return
+	 */
+	private static boolean dealResponseState(String str){
+		if(str!=null){
+			if(str.equals("connect_timeout"))
+				return false;
+			else if(str.equals("PostError"))
+				return false;
+			else if(str.equals("InterNetError"))
+				return false;
+			else
+				return true;
+		}
+		else
+			return false;
 	}
 
 	// 向activity发服务器返回消息
 	public static void sendHandlerMsg(String result, Handler h) {
 		Message msg = h.obtainMessage();
-		msg.obj = result;
+		if(dealResponseState(result))
+			msg.obj = result;
+		else
+			msg.what=ResponseTypeValue.INTENT_ERROR;
 		h.sendMessage(msg);
 	}
 
