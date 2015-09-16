@@ -27,8 +27,10 @@ import com.xicheng.trid.crush.StartCrushActivity;
 import com.xicheng.trid.hx.activity.BaseActivity;
 import com.xicheng.trid.hx.activity.ChatAllHistoryFragment;
 import com.xicheng.trid.hx.activity.LoginActivity;
+import com.xicheng.trid.hx.db.UserDao;
 import com.xicheng.trid.json.PfPictureRequest;
 import com.xicheng.trid.match.MatchActivity;
+import com.xicheng.trid.settings.Setting;
 import com.xicheng.trid.settings.SettingsActivity;
 import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.utils.PicUtil;
@@ -81,7 +83,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	private OnClickListener left_act;
 	private OnClickListener right_act_match;
 	private OnClickListener right_act_camera;
-	private TextView title;
+	private TextView tv_title;
 	// 侧滑菜单实例化
 	private SlidingMenu menu;
 	private LinearLayout settings;
@@ -125,6 +127,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		initTitleBar();
 		// 初始化联系人变化监听器
 		initListener();
+		// 初始化本地设置信息
+		Setting.settingsList = new UserDao(this).getSettingsList();
 		Log.i(TAG, "oncreate");
 		// 预下载二选一图片
 		// ----------------------------------------------------------------------------------------
@@ -262,7 +266,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			}
 		};
 		right.setOnClickListener(right_act_match);
-		title = (TextView) findViewById(R.id.title);
+		tv_title = (TextView) findViewById(R.id.title);
 	}
 
 	/**
@@ -369,19 +373,23 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 					chat_icon.setImageResource(R.drawable.chat_on);
 					heart_icon.setImageResource(R.drawable.heart_off);
 					views_icon.setImageResource(R.drawable.views_off);
-					title.setText("聊天");
+					tv_title.setText("聊天");
 					break;
 				case 1:
 					chat_icon.setImageResource(R.drawable.chat_off);
 					heart_icon.setImageResource(R.drawable.heart_on);
 					views_icon.setImageResource(R.drawable.views_off);
+<<<<<<< HEAD
 					title.setText("9377雷霆之怒");
+=======
+					tv_title.setText("悠悠我心");
+>>>>>>> SP-to-DB
 					break;
 				case 2:
 					chat_icon.setImageResource(R.drawable.chat_off);
 					heart_icon.setImageResource(R.drawable.heart_off);
 					views_icon.setImageResource(R.drawable.views_on);
-					title.setText("发现");
+					tv_title.setText("发现");
 					break;
 				default:
 					break;
