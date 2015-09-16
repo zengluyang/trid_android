@@ -17,6 +17,7 @@ public class ConnInfo {
 	public static String HUANXIN_ID;
 	public static String HUANXIN_PWD;
 	public static Boolean ALREADY_LOGIN;
+	public static Boolean NETWORK_STATE=true;
 
 	/**
 	 * 从conn_data.xml中读取联网数据

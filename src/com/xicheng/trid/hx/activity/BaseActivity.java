@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,11 +39,14 @@ import com.xicheng.trid.hx.db.UserDao;
 import com.xicheng.trid.hx.domain.User;
 import com.xicheng.trid.hx.utils.UserUtils;
 import com.xicheng.trid.main.Constant;
+import com.xicheng.trid.receivers.NetworkChangeReceiver;
 import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.value.ResponseTypeValue;
 
 public abstract class BaseActivity extends FragmentActivity {
-    protected abstract void handleResult(JSONObject obj); 
+    protected NetworkChangeReceiver networkChangeReceiver;
+    protected IntentFilter intentFilter;
+	protected abstract void handleResult(JSONObject obj); 
     protected void handleError(){};
 	Handler  handler = new Handler(){
 		public void handleMessage(Message msg)
@@ -63,6 +67,10 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        networkChangeReceiver=new NetworkChangeReceiver();
+        registerReceiver(networkChangeReceiver,intentFilter);
+       
     }
 
     @Override
@@ -88,6 +96,11 @@ public abstract class BaseActivity extends FragmentActivity {
     {
     	super.onPause();
     	HttpUtil.setHandler(null);
+    }
+    @Override
+    protected void onDestroy(){
+    	super.onDestroy();
+    	unregisterReceiver(networkChangeReceiver);
     }
     /**
      * 返回
