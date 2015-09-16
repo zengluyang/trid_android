@@ -379,11 +379,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 					chat_icon.setImageResource(R.drawable.chat_off);
 					heart_icon.setImageResource(R.drawable.heart_on);
 					views_icon.setImageResource(R.drawable.views_off);
-<<<<<<< HEAD
-					title.setText("9377雷霆之怒");
-=======
 					tv_title.setText("悠悠我心");
->>>>>>> SP-to-DB
 					break;
 				case 2:
 					chat_icon.setImageResource(R.drawable.chat_off);
