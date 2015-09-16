@@ -67,6 +67,7 @@ public abstract class BaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
+        intentFilter = new IntentFilter();
         intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         networkChangeReceiver=new NetworkChangeReceiver();
         registerReceiver(networkChangeReceiver,intentFilter);
