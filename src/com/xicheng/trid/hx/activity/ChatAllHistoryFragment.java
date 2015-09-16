@@ -6,9 +6,16 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.Pair;
@@ -34,11 +41,15 @@ import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
+import com.google.gson.Gson;
 import com.xicheng.trid.Constant;
 import com.xicheng.trid.DemoApplication;
 import com.xicheng.trid.R;
 import com.xicheng.trid.hx.adapter.ChatAllHistoryAdapter;
+import com.xicheng.trid.json.FriendListRequest;
 import com.xicheng.trid.main.MainActivity;
+import com.xicheng.trid.utils.HttpUtil;
+import com.xicheng.trid.value.RequestUrlValue;
 
 /**
  * 显示所有会话记录，比较简单的实现，更好的可能是把陌生人存入本地，这样取到的聊天记录是可控的
@@ -49,7 +60,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	private InputMethodManager inputMethodManager;
 	private ListView listView;
 	private ChatAllHistoryAdapter adapter;
-	
+	private Handler handler;
 	private boolean hidden;
 	private List<EMConversation> conversationList = new ArrayList<EMConversation>();
 		
@@ -69,7 +80,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
             return;
 		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 				
-		
+		requestList();
 		conversationList.addAll(loadConversationsWithRecentChat());
 		listView = (ListView) getView().findViewById(R.id.list);
 		adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
@@ -109,6 +120,44 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 			}
 
 		});
+	}
+
+	private void requestList() {
+		// TODO Auto-generated method stub
+		handler=new Handler(Looper.getMainLooper()){
+			public void handleMessage(Message msg)
+			{
+				JSONObject obj;
+				try {
+					obj = new JSONObject(msg.obj.toString());
+					handleResult(obj);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+		HttpUtil.setHandler(handler);
+		HttpUtil.postRequest(RequestUrlValue.GET_FRIEND_REQUEST, new Gson().toJson(new FriendListRequest()));
+		
+	}
+
+	protected void handleResult(JSONObject obj) {
+		// TODO Auto-generated method stub
+		try {
+			JSONArray data=obj.getJSONArray("friend_list");
+			for(int i=0;i<data.length();i++){
+				JSONObject info=data.getJSONObject(i);
+				EMConversation conversation=EMChatManager.getInstance().getConversation
+						(info.getString("chat_title"));
+				conversationList.add(conversation);
+				adapter.notifyDataSetChanged();
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	void hideSoftKeyboard() {

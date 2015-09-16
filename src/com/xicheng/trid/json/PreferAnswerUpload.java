@@ -20,18 +20,6 @@ public class PreferAnswerUpload {
 	private String token;
 	int count = 0;// 二选一结果数量
 	ArrayList<PreferAnswer> pf_answer;
-	
-	private static PreferAnswerUpload instance;
-	/**
-	 * 获取上传偏好结果实例
-	 * @return
-	 */
-	public static PreferAnswerUpload getInstance(){
-		if(instance == null){
-			instance = new PreferAnswerUpload();
-		}
-		return instance;
-	}
 
 	/**
 	 * 新建对象并保存上传需要的参数值
@@ -76,9 +64,7 @@ public class PreferAnswerUpload {
 		count += pfAnswers.size();
 	}
 	
-	/**
-	 * 更新上传信息
-	 */
+	//更新上传信息
 	public void refresh(){
 		this.type = RequestTypeValue.PF_ANSWER_UPLOAD;
 		this.tel = ConnInfo.TEL;

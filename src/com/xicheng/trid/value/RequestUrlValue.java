@@ -19,6 +19,10 @@ public class RequestUrlValue {
 	public static final String SMS_VALIDATION_REQUEST;
 	// 验证验证码
 	public static final String SMS_VALIDATION_CODE;
+	//获取聊天记录
+	public static final String SMS_MSG_HISTORY;
+	//获取好友列表
+	public static final String GET_FRIEND_REQUEST;
 
 	/**
 	 * 执行初始化
@@ -32,5 +36,7 @@ public class RequestUrlValue {
 		SEND_INVITATION_REQUEST = URL_PARENT + "index.php?r=contact/send-invitation";
 		SMS_VALIDATION_REQUEST = URL_PARENT + "index.php?r=user/sms-validation-request";
 		SMS_VALIDATION_CODE = URL_PARENT + "index.php?r=user/sms-validation-code";
+		SMS_MSG_HISTORY=URL_PARENT+"index.php?r=chat-record/get-chat-record-per-conversation";
+		GET_FRIEND_REQUEST=URL_PARENT+"index.php?r=contact/get-friend-list";
 	}
 }

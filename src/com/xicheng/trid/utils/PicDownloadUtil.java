@@ -20,7 +20,7 @@ public class PicDownloadUtil {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					//建立连接.test一下
+					//建立连接
 					URL httpUrl;
 					httpUrl = new URL(url);
 					HttpURLConnection conn = (HttpURLConnection) httpUrl.openConnection();

@@ -29,6 +29,7 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+
 import com.umeng.analytics.MobclickAgent;
 import com.xicheng.trid.DemoApplication;
 import com.xicheng.trid.applib.controller.HXSDKHelper;
@@ -38,22 +39,25 @@ import com.xicheng.trid.hx.domain.User;
 import com.xicheng.trid.hx.utils.UserUtils;
 import com.xicheng.trid.main.Constant;
 import com.xicheng.trid.utils.HttpUtil;
+import com.xicheng.trid.value.ResponseTypeValue;
 
 public abstract class BaseActivity extends FragmentActivity {
     protected abstract void handleResult(JSONObject obj); 
+    protected void handleError(){};
 	Handler  handler = new Handler(){
 		public void handleMessage(Message msg)
 		{
-			JSONObject obj;
-			try {
-				obj = new JSONObject(msg.obj.toString());
-				handleResult(obj);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			if(msg.what==ResponseTypeValue.INTENT_ERROR)
+				handleError();
+			else{
+				try {
+					JSONObject obj = new JSONObject(msg.obj.toString());
+					handleResult(obj);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}	
 		}
-		
 	};
 
     @Override

@@ -67,11 +67,6 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 			+ UserDao.COLUMN_NAME_TIME + " TEXT PRIMARY KEY," 
 		    + UserDao.COLUMN_NAME_SWITCH + " INT);";
 	
-	// settings table
-	private static final String CREATE_SETTINGS_TABLE = "CREATE TABLE "
-			+ UserDao.SETTINGS_TABLE_NAME + " ("
-			+ UserDao.SETTINGS_COLUMN_NAME_SETTINGNAME + " TEXT PRIMARY KEY, "
-			+ UserDao.SETTINGS_COLUMN_NAME_STATUS + " INT);";
 	
 	private DbOpenHelper(Context context) {
 		super(context, getUserDatabaseName(), null, DATABASE_VERSION);
@@ -96,7 +91,7 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 		db.execSQL(ROBOT_TABLE_CREATE);
 		//db.execSQL(CREATE_NOTES_TABLE);
 		db.execSQL(CREATE_ALARM_TABLE);
-		db.execSQL(CREATE_SETTINGS_TABLE);//创建本地设置表
+		
 	}
 	
 	

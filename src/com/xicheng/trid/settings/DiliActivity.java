@@ -1,14 +1,15 @@
 package com.xicheng.trid.settings;
 
+import com.xicheng.trid.R;
+import com.xicheng.trid.value.ConnInfo;
+
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
-
-import com.xicheng.trid.R;
-import com.xicheng.trid.hx.db.UserDao;
-import com.xicheng.trid.value.FinalValue;
 /**
  * 
  * @author DengRenbin
@@ -16,21 +17,36 @@ import com.xicheng.trid.value.FinalValue;
  */
 public class DiliActivity extends Activity {
 	private ImageButton fanhui;
-	private ImageButton locationPermission;
+	private ImageButton dilishouquan;
+
+	private SharedPreferences spref;
+	private Editor editor;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings_dlsq);
+		spref = getSharedPreferences("settings_data"+ConnInfo.TEL, MODE_PRIVATE);
+		editor = spref.edit();
 		//地理位置授权按钮
-		locationPermission = (ImageButton) findViewById(R.id.imagebutton_dlsq);
-		Setting settingLocationPermission = Setting.getSetting(Setting.SETTINGNAME_LOCATION_PERMISSION);
-		Setting.load(settingLocationPermission, locationPermission);
-		locationPermission.setOnClickListener(new OnClickListener() {
+		dilishouquan = (ImageButton) findViewById(R.id.imagebutton_dlsq);
+		boolean data = spref.getBoolean("di_li_shou_quan", true);
+		if(data){
+			dilishouquan.setImageResource(R.drawable.kaiguan_on);
+		} else {
+			dilishouquan.setImageResource(R.drawable.kaiguan_off);
+		}
+		dilishouquan.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Setting settingLocationPermission = Setting.getSetting(Setting.SETTINGNAME_LOCATION_PERMISSION);
-				settingLocationPermission.setStatus(FinalValue.TRUE-settingLocationPermission.getStatus());
-				Setting.load(settingLocationPermission, locationPermission);
-				new UserDao(DiliActivity.this).saveSettings(Setting.settingsList);
+				boolean data = spref.getBoolean("di_li_shou_quan", true);
+				if(data){
+					editor.putBoolean("di_li_shou_quan", false);
+					editor.commit();
+					dilishouquan.setImageResource(R.drawable.kaiguan_off);
+				} else {
+					editor.putBoolean("di_li_shou_quan", true);
+					editor.commit();
+					dilishouquan.setImageResource(R.drawable.kaiguan_on);
+				}
 			}
 		});
 		//返回键

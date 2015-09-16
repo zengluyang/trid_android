@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
@@ -42,7 +43,6 @@ import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-
 import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -93,6 +93,7 @@ import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.PathUtil;
 import com.easemob.util.VoiceRecorder;
+import com.google.gson.Gson;
 import com.xicheng.trid.DemoApplication;
 import com.xicheng.trid.DemoHXSDKHelper;
 import com.xicheng.trid.R;
@@ -114,6 +115,11 @@ import com.xicheng.trid.hx.utils.SmileUtils;
 import com.xicheng.trid.hx.utils.UserUtils;
 import com.xicheng.trid.hx.widget.ExpandGridView;
 import com.xicheng.trid.hx.widget.PasteEditText;
+import com.xicheng.trid.json.HistoryMsg;
+import com.xicheng.trid.utils.HttpUtil;
+import com.xicheng.trid.utils.JsonParser;
+import com.xicheng.trid.value.RequestUrlValue;
+import com.xicheng.trid.value.ResponseTypeValue;
 
 /**
  * 聊天页面
@@ -200,6 +206,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	private boolean isloading;
 	private final int pagesize = 20;
 	private boolean haveMoreData = true;
+	//请求服务器，判断消息数量是否为空
+	private boolean msgIsEmpty=false;
 	private Button btnMore;
 	public String playMsgId;
 	ToggleButton alarm_preview_but1;
@@ -401,6 +409,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	                                                 else{
                                                          messages = conversation.loadMoreGroupMsgFromDB(adapter.getItem(0).getMsgId(), pagesize);
 	                                                 }
+	                                                 
 		                                         } catch (Exception e1) {
 	                                                 swipeRefreshLayout.setRefreshing(false);
 	                                                 return;
@@ -413,7 +422,13 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	                                                     haveMoreData = false;
 	                                                 }
 		                                         } else {
-		                                             haveMoreData = false;
+		                                        	 HttpUtil.postRequest(RequestUrlValue.SMS_MSG_HISTORY, new Gson().toJson(new HistoryMsg()));
+		                                        	 if(!msgIsEmpty)
+		                                        		 haveMoreData = false;
+		                                        	 else{
+		                                        		 //更新消息操作
+		                                        
+		                                        	 }
 		                                         }
 		                                         
 		                                         isloading = false;
@@ -481,6 +496,8 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
         // 这个数目如果比用户期望进入会话界面时显示的个数不一样，就多加载一些
         final List<EMMessage> msgs = conversation.getAllMessages();
         int msgCount = msgs != null ? msgs.size() : 0;
+        if(msgCount==0)
+        	HttpUtil.postRequest(RequestUrlValue.SMS_MSG_HISTORY, new Gson().toJson(new HistoryMsg()));
         if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
             String msgId = null;
             if (msgs != null && msgs.size() > 0) {
@@ -1781,6 +1798,24 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	@Override
 	protected void handleResult(JSONObject obj) {
 		// TODO Auto-generated method stub
+		try{
+			if (obj.getString("type").equals(ResponseTypeValue.SMS_HISTORY)){
+				if(obj.getBoolean("success")){
+					if(obj.getInt("count")!=0){
+						conversation=JsonParser.getInstance(toChatUsername).getConversation(obj);
+						adapter.notifyDataSetChanged();
+						JsonParser.getInstance(toChatUsername).logTest();
+					}
+					else{
+						msgIsEmpty=true;
+					}
+				}
+			}
+					
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 		
 	}
 

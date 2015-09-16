@@ -22,7 +22,7 @@ import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.utils.PicUtil;
 import com.xicheng.trid.value.ConnInfo;
 import com.xicheng.trid.value.RequestUrlValue;
-import com.xicheng.trid.value.ResultTypeValue;
+import com.xicheng.trid.value.ResponseTypeValue;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -230,7 +230,7 @@ public class PreferActivity extends BaseActivity {
 	 */
 	protected void handleResult(JSONObject obj) {
 		try {
-			if (obj.getString("type").equals(ResultTypeValue.PF_PICTURE_RESULT)) {
+			if (obj.getString("type").equals(ResponseTypeValue.PF_PICTURE_RESULT)) {
 				// 处理返回的偏好（二选一）图片及相关信息
 				if (obj.getBoolean("success")) {
 					// 进行图片下载与保存
@@ -244,7 +244,7 @@ public class PreferActivity extends BaseActivity {
 					Log.i(TAG, "图片下载失败");
 					showPicTriD();
 				}
-			} else if (obj.getString("type").equals(ResultTypeValue.PF_ANSWER_UPLOAD_RESULT)) {
+			} else if (obj.getString("type").equals(ResponseTypeValue.PF_ANSWER_UPLOAD_RESULT)) {
 				// 处理偏好（二选一)结果上传返回值
 				Intent intent;
 				if (obj.getBoolean("success")) {
