@@ -19,4 +19,17 @@
 <fullyQualifiedTypeName name="com.xicheng.trid.value.ConnInfo"/>
 <fullyQualifiedTypeName name="com.xicheng.trid.json.FriendListRequest"/>
 <fullyQualifiedTypeName name="com.google.gson.Gson"/>
+<fullyQualifiedTypeName name="org.apache.http.client.HttpClient"/>
+<fullyQualifiedTypeName name="org.apache.http.params.BasicHttpParams"/>
+<fullyQualifiedTypeName name="org.apache.http.params.HttpProtocolParams"/>
+<fullyQualifiedTypeName name="org.apache.http.params.HttpConnectionParams"/>
+<fullyQualifiedTypeName name="org.apache.http.conn.scheme.SchemeRegistry"/>
+<fullyQualifiedTypeName name="org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager"/>
+<fullyQualifiedTypeName name="org.apache.http.impl.client.DefaultHttpClient"/>
+<fullyQualifiedTypeName name="org.apache.http.conn.scheme.Scheme"/>
+<fullyQualifiedTypeName name="org.apache.http.conn.scheme.PlainSocketFactory"/>
+<fullyQualifiedTypeName name="javax.net.ssl.SSLSocketFactory"/>
+<fullyQualifiedTypeName name="org.apache.http.HttpVersion"/>
+<fullyQualifiedTypeName name="org.apache.http.protocol.HTTP"/>
+<fullyQualifiedTypeName name="com.xicheng.trid.value.ResponseTypeValue"/>
 </qualifiedTypeNameHistroy>
