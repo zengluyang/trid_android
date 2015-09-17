@@ -46,10 +46,13 @@ import com.xicheng.trid.Constant;
 import com.xicheng.trid.DemoApplication;
 import com.xicheng.trid.R;
 import com.xicheng.trid.hx.adapter.ChatAllHistoryAdapter;
+import com.xicheng.trid.hx.db.UserDao;
+import com.xicheng.trid.hx.domain.User;
 import com.xicheng.trid.json.FriendListRequest;
 import com.xicheng.trid.main.MainActivity;
 import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.value.RequestUrlValue;
+import com.xicheng.trid.value.ResponseTypeValue;
 
 /**
  * 显示所有会话记录，比较简单的实现，更好的可能是把陌生人存入本地，这样取到的聊天记录是可控的
@@ -63,6 +66,8 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	private Handler handler;
 	private boolean hidden;
 	private List<EMConversation> conversationList = new ArrayList<EMConversation>();
+	private List<User> list=new ArrayList();
+	private UserDao dao;
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,7 +84,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		if(savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
             return;
 		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-				
+		dao=new UserDao(getActivity());		
 		requestList();
 		conversationList.addAll(loadConversationsWithRecentChat());
 		listView = (ListView) getView().findViewById(R.id.list);
@@ -127,21 +132,25 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		handler=new Handler(Looper.getMainLooper()){
 			public void handleMessage(Message msg)
 			{
-				JSONObject obj;
-				try {
-					obj = new JSONObject(msg.obj.toString());
-					handleResult(obj);
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				if(msg.what==ResponseTypeValue.INTENT_ERROR)
+					handleError();
+				else{
+					try {
+						JSONObject obj = new JSONObject(msg.obj.toString());
+						handleResult(obj);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}	
 			}
 		};
 		HttpUtil.setHandler(handler);
 		HttpUtil.postRequest(RequestUrlValue.GET_FRIEND_REQUEST, new Gson().toJson(new FriendListRequest()));
 		
 	}
-
+	private void handleError(){
+		Toast.makeText(getActivity(), "获取失败，请检查网络", Toast.LENGTH_LONG).show();
+	}
 	protected void handleResult(JSONObject obj) {
 		// TODO Auto-generated method stub
 		try {
@@ -150,9 +159,13 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 				JSONObject info=data.getJSONObject(i);
 				EMConversation conversation=EMChatManager.getInstance().getConversation
 						(info.getString("chat_title"));
+				User user=new User(info.getString("peer_tel"),info.getString("huanxin_id"),
+						info.getInt("type"),info.getString("chat_title"),5);
+				list.add(user);
 				conversationList.add(conversation);
 				adapter.notifyDataSetChanged();
 			}
+			dao.saveContactList(list);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
