@@ -29,10 +29,9 @@ public class JsonParser {
 	//私有构造器，防止非法创建
 	private JsonParser(){}
 	//创建一个单例
-	public static synchronized JsonParser getInstance(String toChatName){
+	public static synchronized JsonParser getInstance(){
 		if(parser==null){
 			parser=new JsonParser();
-			chatName=toChatName;
 		}
 		return parser;
 	}
@@ -53,6 +52,7 @@ public class JsonParser {
 				String messageType=info.getString("from").equals(ConnInfo.TEL)?"send":"receive";
 				String type=info.getJSONObject("payload").getJSONArray("bodies")
 						.getJSONObject(0).getString("type");
+				Log.i(TAG,type);
 				//消息类型为文本类
 				if(type.equals("txt")){
 					if(messageType.equals("send"))
@@ -99,6 +99,9 @@ public class JsonParser {
 				msg.setFrom(info.getString("from"));
 				msg.setMsgId(info.getString("msg_id"));
 				msg.setChatType(EMMessage.ChatType.Chat);
+				if(messageType.equals("send")){
+					chatName=info.getString("to");
+				}
 				list.add(msg);
 			}
 				
@@ -122,6 +125,23 @@ public class JsonParser {
 		return conversation;
 		
 	}
+	/**
+	 * 根据服务器返回的历史记录信息添加对话
+	 */
+	public List<EMConversation> getConversationList(JSONObject obj){
+		List<EMConversation> list=new ArrayList();
+		try {
+			JSONArray data=obj.getJSONArray("chat_records");
+			for(int i=0;i<data.length();i++){
+				Log.i(TAG,data.getJSONObject(i).toString());
+				list.add(getConversation(data.getJSONObject(i)));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	/**
 	 * 测试方法，用于检测是否接收到服务器的存储消息
 	 */

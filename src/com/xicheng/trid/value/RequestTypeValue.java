@@ -19,4 +19,6 @@ public class RequestTypeValue {
 	public static final String SMS_VALIDATION_CODE = "sms_validation_code";
 	//请求聊天记录
 	public static final String SMS_HISTORY="get_chat_record_per_conversation";
+	//获取用户聊天记录
+	public static final String FRIEND_HISTORY="get_chat_record";
 }

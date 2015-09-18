@@ -46,11 +46,14 @@ import com.xicheng.trid.Constant;
 import com.xicheng.trid.DemoApplication;
 import com.xicheng.trid.R;
 import com.xicheng.trid.hx.adapter.ChatAllHistoryAdapter;
+import com.xicheng.trid.hx.db.DataBaseExecutor;
 import com.xicheng.trid.hx.db.UserDao;
 import com.xicheng.trid.hx.domain.User;
+import com.xicheng.trid.json.CommonInfo;
 import com.xicheng.trid.json.FriendListRequest;
 import com.xicheng.trid.main.MainActivity;
 import com.xicheng.trid.utils.HttpUtil;
+import com.xicheng.trid.utils.JsonParser;
 import com.xicheng.trid.value.RequestUrlValue;
 import com.xicheng.trid.value.ResponseTypeValue;
 
@@ -68,6 +71,8 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	private List<EMConversation> conversationList = new ArrayList<EMConversation>();
 	private List<User> list=new ArrayList();
 	private UserDao dao;
+	private DataBaseExecutor executor;
+	private static final String TAG="ChatAllHistoryFragment";
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,10 +93,16 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		requestList();
 		conversationList.addAll(loadConversationsWithRecentChat());
 		listView = (ListView) getView().findViewById(R.id.list);
-		adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
-		// 设置adapter
-		listView.setAdapter(adapter);
-				
+		//executor=new DataBaseExecutor(getActivity());
+		//executor.insertConList("test", null, null, 0);
+		if(conversationList.size()==0){
+			requestConver();
+		}
+		else{
+			adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
+			// 设置adapter
+			listView.setAdapter(adapter);
+		}		
 		
 		final String st2 = getResources().getString(R.string.Cant_chat_with_yourself);
 		
@@ -106,6 +117,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 					Toast.makeText(getActivity(), st2, 0).show();
 				else {
 				    // 进入聊天页面（单聊）
+					Log.i(TAG+115, "readyto startChat");
 				    Intent intent = new Intent(getActivity(), ChatActivity.class);
 				    intent.putExtra("userId", username);
 				    startActivity(intent);
@@ -148,22 +160,54 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		HttpUtil.postRequest(RequestUrlValue.GET_FRIEND_REQUEST, new Gson().toJson(new FriendListRequest()));
 		
 	}
+	/**
+	 * 从网络获取与所有联系人的历史记录
+	 */
+	private void requestConver(){
+		handler=new Handler(Looper.getMainLooper()){
+			public void handleMessage(Message msg)
+			{
+				if(msg.what==ResponseTypeValue.INTENT_ERROR)
+					handleError();
+				else{
+					try {
+						JSONObject obj = new JSONObject(msg.obj.toString());
+						handleConverResult(obj);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}	
+			}
+		};
+		HttpUtil.setHandler(handler);
+		HttpUtil.postRequest(RequestUrlValue.GET_CHAT_RECORD, new Gson().toJson(new CommonInfo()));
+	}
+	/**
+	 * 获取历史记录以得到conversationList
+	 * @param obj
+	 */
+	private void handleConverResult(JSONObject obj){
+		conversationList=JsonParser.getInstance().getConversationList(obj);
+		Log.i(TAG+"LINE 184",conversationList.size()+"");
+		adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
+		listView.setAdapter(adapter);
+	}
 	private void handleError(){
 		Toast.makeText(getActivity(), "获取失败，请检查网络", Toast.LENGTH_LONG).show();
 	}
+	/**
+	 * 从网络获取好友列表并存储
+	 * @param obj
+	 */
 	protected void handleResult(JSONObject obj) {
 		// TODO Auto-generated method stub
 		try {
 			JSONArray data=obj.getJSONArray("friend_list");
 			for(int i=0;i<data.length();i++){
 				JSONObject info=data.getJSONObject(i);
-				EMConversation conversation=EMChatManager.getInstance().getConversation
-						(info.getString("chat_title"));
 				User user=new User(info.getString("peer_tel"),info.getString("huanxin_id"),
 						info.getInt("type"),info.getString("chat_title"),5);
 				list.add(user);
-				conversationList.add(conversation);
-				adapter.notifyDataSetChanged();
 			}
 			dao.saveContactList(list);
 		} catch (JSONException e) {

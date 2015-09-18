@@ -1802,9 +1802,9 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			if (obj.getString("type").equals(ResponseTypeValue.SMS_HISTORY)){
 				if(obj.getBoolean("success")){
 					if(obj.getInt("count")!=0){
-						conversation=JsonParser.getInstance(toChatUsername).getConversation(obj);
+						conversation=JsonParser.getInstance().getConversation(obj);
 						adapter.notifyDataSetChanged();
-						JsonParser.getInstance(toChatUsername).logTest();
+						JsonParser.getInstance().logTest();
 					}
 					else{
 						msgIsEmpty=true;

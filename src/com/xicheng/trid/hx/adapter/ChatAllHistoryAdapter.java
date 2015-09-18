@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,7 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		Log.i(TAG, "getview called");
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.row_chat_history, parent, false);
 		}

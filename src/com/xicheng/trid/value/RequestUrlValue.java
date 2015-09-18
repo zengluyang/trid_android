@@ -23,7 +23,8 @@ public class RequestUrlValue {
 	public static final String SMS_MSG_HISTORY;
 	//获取好友列表
 	public static final String GET_FRIEND_REQUEST;
-
+	//
+	public static final String GET_CHAT_RECORD;
 	/**
 	 * 执行初始化
 	 */
@@ -38,5 +39,6 @@ public class RequestUrlValue {
 		SMS_VALIDATION_CODE = URL_PARENT + "index.php?r=user/sms-validation-code";
 		SMS_MSG_HISTORY=URL_PARENT+"index.php?r=chat-record/get-chat-record-per-conversation";
 		GET_FRIEND_REQUEST=URL_PARENT+"index.php?r=contact/get-friend-list";
+		GET_CHAT_RECORD=URL_PARENT+"index.php?r=chat-record/get-chat-record";
 	}
 }

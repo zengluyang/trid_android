@@ -78,7 +78,7 @@ public class HttpUtil {
 				result = EntityUtils.toString(response.getEntity());
 				Log.i("HttpUtil","result: "+result);
 			} else {
-				Log.i("HttpUtil", "post false");
+				Log.i("HttpUtil",EntityUtils.toString(response.getEntity()));
 			}
 		} catch (ClientProtocolException e1) {
 			e1.printStackTrace();
