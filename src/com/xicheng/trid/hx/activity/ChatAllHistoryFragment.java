@@ -37,6 +37,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
@@ -69,7 +70,6 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	private Handler handler;
 	private boolean hidden;
 	private List<EMConversation> conversationList = new ArrayList<EMConversation>();
-	private List<User> list=new ArrayList();
 	private UserDao dao;
 	private DataBaseExecutor executor;
 	private static final String TAG="ChatAllHistoryFragment";
@@ -88,9 +88,8 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		super.onActivityCreated(savedInstanceState);
 		if(savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false))
             return;
-		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		dao=new UserDao(getActivity());		
-		requestList();
+		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);	
+		//requestList();
 		conversationList.addAll(loadConversationsWithRecentChat());
 		listView = (ListView) getView().findViewById(R.id.list);
 		//executor=new DataBaseExecutor(getActivity());
@@ -188,7 +187,8 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	 */
 	private void handleConverResult(JSONObject obj){
 		conversationList=JsonParser.getInstance().getConversationList(obj);
-		Log.i(TAG+"LINE 184",conversationList.size()+"");
+		Log.i(TAG+"SIZE",conversationList.size()+"");
+		
 		adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
 		listView.setAdapter(adapter);
 	}
@@ -201,19 +201,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	 */
 	protected void handleResult(JSONObject obj) {
 		// TODO Auto-generated method stub
-		try {
-			JSONArray data=obj.getJSONArray("friend_list");
-			for(int i=0;i<data.length();i++){
-				JSONObject info=data.getJSONObject(i);
-				User user=new User(info.getString("peer_tel"),info.getString("huanxin_id"),
-						info.getInt("type"),info.getString("chat_title"),5);
-				list.add(user);
-			}
-			dao.saveContactList(list);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 	}
 

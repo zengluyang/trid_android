@@ -46,7 +46,7 @@ public class BirthChooseActivity extends BaseActivity {
 		confirm.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				int year = datePicker.getYear();
-				int month = datePicker.getMonth();
+				int month = datePicker.getMonth()+1;
 				int date = datePicker.getDayOfMonth();
 				birthdate = new Birthdate(year,month,date);//保存生日信息
 				HttpUtil.postRequest(RequestUrlValue.BASIC_INFO_UPLOAD,

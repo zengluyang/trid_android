@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +30,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -67,7 +71,9 @@ public class LoginActivity extends BaseActivity {
 	protected SmsValidationCode post_code;
 	protected SmsValidationRequest post_request;
 	protected String tel;
-
+	private Handler mHandler;
+	private List<User> listUser=new ArrayList();
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login_trid);
@@ -80,6 +86,22 @@ public class LoginActivity extends BaseActivity {
 			startActivity(intent);
 			finish();
 		}
+		
+		mHandler=new Handler(Looper.getMainLooper()){
+			public void handleMessage(Message msg)
+			{
+				if(msg.what==ResponseTypeValue.INTENT_ERROR)
+					handleError();
+				else{
+					try {
+						JSONObject obj = new JSONObject(msg.obj.toString());
+						handleUserResult(obj);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}	
+			}
+		};
 
 		// 实例化区号下拉栏
 		getInstanceOfSpinner();
@@ -112,6 +134,35 @@ public class LoginActivity extends BaseActivity {
 				HttpUtil.postRequest(RequestUrlValue.SMS_VALIDATION_CODE, new Gson().toJson(post_code));
 			}
 		});
+	}
+	/**
+	 * 重写父类错误处理方法
+	 */
+	@Override
+	public void handleError(){
+		Toast.makeText(this, "联系人列表获取为空", Toast.LENGTH_SHORT).show();
+	}
+	
+	/**
+	 * 保存联系人列表到数据库中
+	 * @param obj
+	 */
+	protected void handleUserResult(JSONObject obj) {
+		UserDao dao=new UserDao(this);
+		try {
+			JSONArray data=obj.getJSONArray("friend_list");
+			for(int i=0;i<data.length();i++){
+				JSONObject info=data.getJSONObject(i);
+				User user=new User(info.getString("peer_tel"),info.getString("huanxin_id"),
+						info.getInt("type"),info.getString("chat_title"),info.getLong("expire"));
+				listUser.add(user);
+			}
+			dao.saveContactList(listUser);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**
@@ -260,8 +311,8 @@ public class LoginActivity extends BaseActivity {
 		    String url = "http://101.200.89.240/index.php?r=contact/get-friend-list";
 		    JSONObject obj =  new JSONObject();
 		    try {
-				obj.put("token", "MU5OYjRaODN4dmRkaXEweiszV0VYZWRad0YrdHIrUXZOVm1WMHhQRWY4MTdtM0ww");
-				obj.put("tel", "15008271111");
+				obj.put("token", token);
+				obj.put("tel", tel);
 				obj.put("type","get_friend_list");
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -270,6 +321,7 @@ public class LoginActivity extends BaseActivity {
 		   
 		    System.out.println(obj.toString());
 			//向服务器请求
+		    HttpUtil.setHandler(mHandler);
 			HttpUtil.postRequest(url, obj.toString());
 			
 		}
