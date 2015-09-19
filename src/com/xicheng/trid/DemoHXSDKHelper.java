@@ -544,5 +544,4 @@ public class DemoHXSDKHelper extends HXSDKHelper{
     }   
     
     
-
 }

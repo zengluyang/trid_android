@@ -11,19 +11,6 @@ import java.util.TimerTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
-import com.xicheng.trid.R;
-import com.xicheng.trid.hx.activity.BaseActivity;
-import com.xicheng.trid.json.PfPictureRequest;
-import com.xicheng.trid.json.PreferAnswer;
-import com.xicheng.trid.json.PreferAnswerUpload;
-import com.xicheng.trid.main.MainActivity;
-import com.xicheng.trid.utils.HttpUtil;
-import com.xicheng.trid.utils.PicUtil;
-import com.xicheng.trid.value.ConnInfo;
-import com.xicheng.trid.value.RequestUrlValue;
-import com.xicheng.trid.value.ResponseTypeValue;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -38,6 +25,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.xicheng.trid.R;
+import com.xicheng.trid.applib.controller.HXSDKHelper;
+import com.xicheng.trid.hx.activity.BaseActivity;
+import com.xicheng.trid.json.PfPictureRequest;
+import com.xicheng.trid.json.PreferAnswer;
+import com.xicheng.trid.json.PreferAnswerUpload;
+import com.xicheng.trid.main.MainActivity;
+import com.xicheng.trid.utils.HttpUtil;
+import com.xicheng.trid.utils.PicUtil;
+import com.xicheng.trid.value.RequestUrlValue;
+import com.xicheng.trid.value.ResponseTypeValue;
 
 /**
  * 二选一（偏好）界面
@@ -117,7 +117,6 @@ public class PreferActivity extends BaseActivity {
 				intent = new Intent(PreferActivity.this, PreferActivity.class);
 			} else {
 				// 上传结果列表，并执行登陆
-				ConnInfo.load(this);
 				HttpUtil.postRequest(RequestUrlValue.PF_ANSWER_UPLOAD, new Gson().toJson(pfAnswerUpload));
 				return;
 			}
@@ -139,7 +138,7 @@ public class PreferActivity extends BaseActivity {
 		if (!parent.exists()) {
 			parent.mkdir();
 		}
-		parent = new File(parent + "/" + ConnInfo.TEL + "/");
+		parent = new File(parent + "/" + HXSDKHelper.getInstance().getHXId() + "/");
 		if (!parent.exists()) {
 			parent.mkdir();
 		}
@@ -148,7 +147,7 @@ public class PreferActivity extends BaseActivity {
 			parent.mkdir();
 		}
 		// 与"prefer_data_<tel>"建立连接
-		spref = getSharedPreferences("prefer_data_" + ConnInfo.TEL, MODE_PRIVATE);
+		spref = getSharedPreferences("prefer_data_" + HXSDKHelper.getInstance().getHXId(), MODE_PRIVATE);
 		editor = spref.edit();
 		// 读取循环队列当前图片文件夹编号
 		current = spref.getInt("current", 0);
@@ -217,7 +216,7 @@ public class PreferActivity extends BaseActivity {
 		imv_0.setImageBitmap(BitmapFactory.decodeFile(pic0.getAbsolutePath()));
 		imv_1.setImageBitmap(BitmapFactory.decodeFile(pic1.getAbsolutePath()));
 		// 与prefer_data_<tel>建立连接
-		spref = getSharedPreferences("prefer_data_" + ConnInfo.TEL, MODE_PRIVATE);
+		spref = getSharedPreferences("prefer_data_" + HXSDKHelper.getInstance().getHXId(), MODE_PRIVATE);
 		editor = spref.edit();
 		// current图片编号+1
 		current = (current + 1) % 11;
@@ -237,7 +236,8 @@ public class PreferActivity extends BaseActivity {
 					PicUtil.handlePfPictureResult(obj, this);
 					// 显示图片
 					prefer_id = obj.getJSONObject("pf").getInt("pf_id");
-					parent = new File(Environment.getExternalStorageDirectory() + "/Xicheng/TriD/" + ConnInfo.TEL
+					parent = new File(Environment.getExternalStorageDirectory() + "/Xicheng/TriD/" 
+							+ HXSDKHelper.getInstance().getHXId()
 							+ "/prefer/" + "/" + prefer_id + "/");
 					showPicFromLocal(parent);
 				} else {

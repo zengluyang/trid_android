@@ -36,6 +36,8 @@ import android.preference.PreferenceManager;
 public class DefaultHXSDKModel extends HXSDKModel{
     private static final String PREF_USERNAME = "username";
     private static final String PREF_PWD = "pwd";
+    private static final String PREF_TOKEN = "token";
+    private static final String PREF_ALREADY_LOGIN = "already_login";
     UserDao dao = null;
     protected Context context = null;
     protected Map<Key,Object> valueCache = new HashMap<Key,Object>();
@@ -146,9 +148,33 @@ public class DefaultHXSDKModel extends HXSDKModel{
         return preferences.getString(PREF_PWD, null);
     }
 
+	@Override
+	public boolean saveToken(String token) {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		return preferences.edit().putString(PREF_PWD, token).commit();
+	}
+
+	@Override
+	public String getToken() {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(PREF_TOKEN, null);
+	}
+	
+    @Override
+    public boolean saveAlreadyLogin(boolean alreadyLogin) {
+    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		return preferences.edit().putBoolean(PREF_ALREADY_LOGIN, alreadyLogin).commit();
+    }
+    
+    @Override
+    public boolean getAlreadyLogin() {
+    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		return preferences.getBoolean(PREF_ALREADY_LOGIN, false);
+    }
+    
     @Override
     public String getAppProcessName() {
-        return null;
+    	return null;
     }
     
     public void setDisabledGroups(List<String> groups){
@@ -239,4 +265,5 @@ public class DefaultHXSDKModel extends HXSDKModel{
         DisabledGroups,
         DisabledIds
     }
+
 }

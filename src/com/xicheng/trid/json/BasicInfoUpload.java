@@ -1,6 +1,6 @@
 package com.xicheng.trid.json;
 
-import com.xicheng.trid.value.ConnInfo;
+import com.xicheng.trid.applib.controller.HXSDKHelper;
 import com.xicheng.trid.value.RequestTypeValue;
 
 /**
@@ -19,8 +19,8 @@ public class BasicInfoUpload {
 	 */
 	public BasicInfoUpload() {
 		this.type = RequestTypeValue.BASIC_INFO_UPLOAD;
-		this.tel = ConnInfo.TEL;
-		this.token = ConnInfo.TOKEN;
+		this.tel = HXSDKHelper.getInstance().getHXId();
+		this.token = HXSDKHelper.getInstance().getToken();
 	}
 	/**
 	 * 新建对象并保存上传需要的参数值，同时保存性别和生日

@@ -10,9 +10,16 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.easemob.chat.*;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
-import com.xicheng.trid.value.ConnInfo;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.ImageMessageBody;
+import com.easemob.chat.LocationMessageBody;
+import com.easemob.chat.MessageBody;
+import com.easemob.chat.TextMessageBody;
+import com.easemob.chat.VoiceMessageBody;
+import com.xicheng.trid.applib.controller.HXSDKHelper;
 
 /**
  * 单例模式,json解析器
@@ -49,7 +56,7 @@ public class JsonParser {
 				JSONObject body=info.getJSONObject("payload").getJSONArray("bodies")
 						.getJSONObject(0);
 				//判断消息类型，是发送的消息还是接收的消息
-				String messageType=info.getString("from").equals(ConnInfo.TEL)?"send":"receive";
+				String messageType=info.getString("from").equals(HXSDKHelper.getInstance().getHXId())?"send":"receive";
 				String type=info.getJSONObject("payload").getJSONArray("bodies")
 						.getJSONObject(0).getString("type");
 				Log.i(TAG,type);

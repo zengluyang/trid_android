@@ -45,12 +45,25 @@ public abstract class HXSDKModel {
     // the speaker is switched on or not?
     public abstract boolean getSettingMsgSpeaker();
    
+    // 保存环信ID
     public abstract boolean saveHXId(String hxId);
+    // 获取环信ID
     public abstract String getHXId();
     
+    // 保存环信密码
     public abstract boolean savePassword(String pwd);
+    // 获取环信密码
     public abstract String getPwd();
     
+    // 保存token
+    public abstract boolean saveToken(String token);
+    // 获取token
+    public abstract String getToken();
+    
+    // 保存登陆信息
+    public abstract boolean saveAlreadyLogin(boolean alreadyLogin);
+    // 获取登陆信息
+    public abstract boolean getAlreadyLogin();
     /**
      * 返回application所在的process name,默认是包名
      * @return

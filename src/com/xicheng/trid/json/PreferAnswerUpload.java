@@ -2,14 +2,14 @@ package com.xicheng.trid.json;
 
 import java.util.ArrayList;
 
-import com.xicheng.trid.value.ConnInfo;
+import com.xicheng.trid.applib.controller.HXSDKHelper;
 import com.xicheng.trid.value.RequestTypeValue;
 
 /**
  * 二选一（偏好）结果上传Json对象
  * 
  * @author DengRenbin
- *
+ * 
  */
 public class PreferAnswerUpload {
 	@SuppressWarnings("unused")
@@ -26,8 +26,8 @@ public class PreferAnswerUpload {
 	 */
 	public PreferAnswerUpload() {
 		this.type = RequestTypeValue.PF_ANSWER_UPLOAD;
-		this.tel = ConnInfo.TEL;
-		this.token = ConnInfo.TOKEN;
+		this.tel = HXSDKHelper.getInstance().getHXId();
+		this.token = HXSDKHelper.getInstance().getToken();
 		this.pf_answer = new ArrayList<PreferAnswer>();
 	}
 
@@ -63,12 +63,12 @@ public class PreferAnswerUpload {
 		}
 		count += pfAnswers.size();
 	}
-	
-	//更新上传信息
-	public void refresh(){
+
+	// 更新上传信息
+	public void refresh() {
 		this.type = RequestTypeValue.PF_ANSWER_UPLOAD;
-		this.tel = ConnInfo.TEL;
-		this.token = ConnInfo.TOKEN;
+		this.tel = HXSDKHelper.getInstance().getHXId();
+		this.token = HXSDKHelper.getInstance().getToken();
 		this.pf_answer = new ArrayList<PreferAnswer>();
 		count = 0;
 	}

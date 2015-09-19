@@ -8,8 +8,6 @@ import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.xicheng.trid.value.ConnInfo;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -18,6 +16,8 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
+
+import com.xicheng.trid.applib.controller.HXSDKHelper;
 
 public class PicUtil {
 
@@ -66,7 +66,7 @@ public class PicUtil {
 	 */
 	public static void handlePfPictureResult(JSONObject obj, Context context){
 			JSONObject picObj;
-			SharedPreferences spref = context.getSharedPreferences("prefer_data_" + ConnInfo.TEL, context.MODE_PRIVATE);
+			SharedPreferences spref = context.getSharedPreferences("prefer_data_" + HXSDKHelper.getInstance().getHXId(), context.MODE_PRIVATE);
 			Editor editor = spref.edit();
 			int last = spref.getInt("last", 0);// 记录循环队列末尾下一个图片文件夹编号
 			try {
@@ -76,7 +76,7 @@ public class PicUtil {
 				
 				int prefer_id = picObj.getInt("pf_id");
 				File parent = new File(Environment.getExternalStorageDirectory() 
-						+ "/Xicheng/TriD/" + ConnInfo.TEL + "/prefer/" + "/" + prefer_id + "/");
+						+ "/Xicheng/TriD/" + HXSDKHelper.getInstance().getHXId() + "/prefer/" + "/" + prefer_id + "/");
 				if (!parent.exists()) {
 					parent.mkdir();
 				}
