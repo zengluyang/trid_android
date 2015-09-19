@@ -1,6 +1,6 @@
 package com.xicheng.trid.json;
 
-import com.xicheng.trid.value.ConnInfo;
+import com.xicheng.trid.applib.controller.HXSDKHelper;
 import com.xicheng.trid.value.RequestTypeValue;
 
 public class HistoryMsg {
@@ -13,9 +13,9 @@ public class HistoryMsg {
 	
 	public HistoryMsg(){
 		this.type=RequestTypeValue.SMS_HISTORY;
-		this.tel=ConnInfo.TEL;
-		this.token=ConnInfo.TOKEN;
-		this.peer_huanxin_id=ConnInfo.HUANXIN_ID;
+		this.tel=HXSDKHelper.getInstance().getHXId();
+		this.token=HXSDKHelper.getInstance().getToken();
+		this.peer_huanxin_id=HXSDKHelper.getInstance().getHXId();
 		this.limit=10;
 		this.offset=0;
 	}

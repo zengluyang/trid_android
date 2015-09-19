@@ -6,6 +6,28 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
 import com.easemob.EMEventListener;
@@ -34,31 +56,8 @@ import com.xicheng.trid.settings.Setting;
 import com.xicheng.trid.settings.SettingsActivity;
 import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.utils.PicUtil;
-import com.xicheng.trid.value.ConnInfo;
 import com.xicheng.trid.value.RequestUrlValue;
 import com.xicheng.trid.value.ResponseTypeValue;
-
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 /**
  * 
@@ -115,7 +114,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		errorText = (TextView) errorItem.findViewById(R.id.tv_connect_errormsg);
 		Log.i(TAG, "[onCreate]");
 		// 设置为已登录
-		ConnInfo.setAlreadyLogin(this, true);
+		HXSDKHelper.getInstance().setAlreadyLogin(true);
 		// 实现状态栏沉浸
 		// getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 		// getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -262,7 +261,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		};
 		right_act_camera = new OnClickListener() {
 			public void onClick(View v) {
-				ConnInfo.setAlreadyLogin(getApplicationContext(), false);
+				HXSDKHelper.getInstance().setAlreadyLogin(false);
 			}
 		};
 		right.setOnClickListener(right_act_match);
@@ -310,7 +309,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		crush = (LinearLayout) findViewById(R.id.an_lian);
 		crush.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				SharedPreferences spref = getSharedPreferences("settings_data_" + ConnInfo.TEL, Activity.MODE_PRIVATE);
+				SharedPreferences spref = getSharedPreferences("settings_data_" + HXSDKHelper.getInstance().getHXId(), Activity.MODE_PRIVATE);
 				boolean isFirst = spref.getBoolean("first_to_anlian", true);
 				Editor editor = spref.edit();
 				if (isFirst) {

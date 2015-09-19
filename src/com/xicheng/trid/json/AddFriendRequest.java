@@ -1,6 +1,6 @@
 package com.xicheng.trid.json;
 
-import com.xicheng.trid.value.ConnInfo;
+import com.xicheng.trid.applib.controller.HXSDKHelper;
 import com.xicheng.trid.value.RequestTypeValue;
 
 public class AddFriendRequest {
@@ -11,8 +11,8 @@ public class AddFriendRequest {
 	private String word;
 	public AddFriendRequest(String peer_tel, String word){
 		this.type = RequestTypeValue.ADD_FRIEND_REQUEST;
-		this.tel = ConnInfo.TEL;
-		this.token = ConnInfo.TOKEN;
+		this.tel = HXSDKHelper.getInstance().getHXId();
+		this.token = HXSDKHelper.getInstance().getToken();
 		this.peer_tel = peer_tel;
 		this.word = word;
 	}

@@ -88,6 +88,13 @@ public abstract class HXSDKHelper {
     protected String password = null;
     
     /**
+     * token in cache
+     */
+    protected String token = null;
+    
+    protected Boolean network_state = true;
+    
+    /**
      * init flag: test if the sdk has been inited before, we don't need to init again
      */
     private boolean sdkInited = false;
@@ -243,7 +250,18 @@ public abstract class HXSDKHelper {
         if(password == null){
             password = hxModel.getPwd();
         }
-        return password;    
+        return password;
+    }
+    
+    public String getToken(){
+    	if(token == null){
+    		token = hxModel.getToken();
+    	}
+    	return token;
+    }
+
+    public boolean getAlreadyLogin(){
+    	return hxModel.getAlreadyLogin();
     }
     
     public void setHXId(String hxId){
@@ -259,6 +277,49 @@ public abstract class HXSDKHelper {
             this.password = password;
         }
     }
+    
+    public void setToken(String token){
+    	if(hxModel.saveToken(token)){
+    		this.token = token;
+    	}
+    }
+    
+    public boolean setAlreadyLogin(boolean alreadyLogin) {
+    	if(hxModel.saveAlreadyLogin(alreadyLogin)){
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public void setNetworkState(boolean networkState) {
+    	this.network_state = networkState;
+    }
+    
+    public boolean getNetworkState() {
+    	return this.network_state;
+    }
+    
+    /**
+     * 设置hxID，hx
+     * @param id
+     * @param pwd
+     * @param token
+     */
+    public void setLoginInfo(String id, String pwd, String token) {
+    	setHXId(id);
+    	setPassword(pwd);
+    	setToken(token);
+    }
+    
+//    /**
+//     * 载入本地登陆信息
+//     */
+//    public void loadLoginInfo() {
+//    	getHXId();
+//    	getPassword();
+//    	getToken();
+//    }
+
     
     /**
      * the subclass must override this class to provide its own model or directly use {@link DefaultHXSDKModel}

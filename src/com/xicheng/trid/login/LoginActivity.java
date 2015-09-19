@@ -14,6 +14,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.google.gson.Gson;
 import com.xicheng.trid.DemoApplication;
+import com.xicheng.trid.DemoHXSDKHelper;
 import com.xicheng.trid.R;
 import com.xicheng.trid.hx.activity.BaseActivity;
 import com.xicheng.trid.hx.db.UserDao;
@@ -22,7 +23,6 @@ import com.xicheng.trid.json.SmsValidationCode;
 import com.xicheng.trid.json.SmsValidationRequest;
 import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.utils.MyCountDownTimer;
-import com.xicheng.trid.value.ConnInfo;
 import com.xicheng.trid.value.RequestUrlValue;
 import com.xicheng.trid.value.ResponseTypeValue;
 
@@ -77,10 +77,8 @@ public class LoginActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login_trid);
-		// 加载连接数据
-		ConnInfo.load(this);
 		// 已经登陆的情况下，直接跳转二选一
-		if (ConnInfo.ALREADY_LOGIN) {
+		if (DemoHXSDKHelper.getInstance().getAlreadyLogin()) {
 			PreferActivity.countDown = 1;
 			Intent intent = new Intent(this, PreferActivity.class);
 			startActivity(intent);
@@ -203,10 +201,8 @@ public class LoginActivity extends BaseActivity {
 					
 					Log.i(TAG, "验证成功");
 					// 保存数据
-					ConnInfo.write(this, tel, obj.getString("token"),
-							obj.getString("huanxin_id"), obj.getString("huanxin_pwd"));
-					// 加载联网数据
-					ConnInfo.load(this);
+					DemoHXSDKHelper.getInstance().setLoginInfo(obj.getString("huanxin_id"),
+							obj.getString("huanxin_pwd"), obj.getString("token"));
 					// 需要基础信息否？
 					PreferActivity.basicInfoRequired = obj.getBoolean("basic_info_required");
 					// 刷新需要上传的二选一结果数组
