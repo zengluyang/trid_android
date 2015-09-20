@@ -151,7 +151,7 @@ public class DefaultHXSDKModel extends HXSDKModel{
 	@Override
 	public boolean saveToken(String token) {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		return preferences.edit().putString(PREF_PWD, token).commit();
+		return preferences.edit().putString(PREF_TOKEN, token).commit();
 	}
 
 	@Override
