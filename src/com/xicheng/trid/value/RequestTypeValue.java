@@ -21,4 +21,6 @@ public class RequestTypeValue {
 	public static final String SMS_HISTORY="get_chat_record_per_conversation";
 	//获取用户聊天记录
 	public static final String FRIEND_HISTORY="get_chat_record";
+	//通知服务器删除好友
+	public static final String DELETE_FRIEND_REQUEST="delete_friend_request";
 }

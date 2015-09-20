@@ -24,6 +24,7 @@ public class User extends EMContact {
 	private int type;//1-暗恋自己的人，2-自己暗恋的人，3-陌生人 
 	private String chat_title;
 	private String tel;
+	
 
 	
 	public User(){}

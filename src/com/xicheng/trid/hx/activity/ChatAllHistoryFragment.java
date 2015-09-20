@@ -3,6 +3,7 @@ package com.xicheng.trid.hx.activity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -50,7 +51,9 @@ import com.xicheng.trid.hx.adapter.ChatAllHistoryAdapter;
 import com.xicheng.trid.hx.db.DataBaseExecutor;
 import com.xicheng.trid.hx.db.UserDao;
 import com.xicheng.trid.hx.domain.User;
+import com.xicheng.trid.hx.utils.UserUtils;
 import com.xicheng.trid.json.CommonInfo;
+import com.xicheng.trid.json.DeleteFriends;
 import com.xicheng.trid.json.FriendListRequest;
 import com.xicheng.trid.main.MainActivity;
 import com.xicheng.trid.utils.HttpUtil;
@@ -91,6 +94,8 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);	
 		//requestList();
 		conversationList.addAll(loadConversationsWithRecentChat());
+		//双方关系三天之后从列表中删除
+		delUserContact(conversationList);
 		listView = (ListView) getView().findViewById(R.id.list);
 		executor=new DataBaseExecutor(getActivity());
 		Log.i(TAG+"MSGBODY",executor.getColumnValue(1, "msgbody")+" ");
@@ -137,7 +142,46 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 
 		});
 	}
-
+	/**
+	 * 处理与联系人的关系，三天后删除
+	 * @param conversationList
+	 */
+	private void delUserContact(List<EMConversation> conversationList) {
+		List<EMConversation> templist=new ArrayList();
+		for(int i=0;i<conversationList.size();i++){
+			User user=UserUtils.getUserInfor(conversationList.get(i).getUserName());
+			//超过三天，关系移除
+			if((user.getAvatar()*1000-new Date().getTime())<=0){
+				templist.add(conversationList.get(i));
+				requestDeleteList(user.getUsername());
+				EMChatManager.getInstance().deleteConversation(user.getUsername());
+			}
+		}
+		conversationList.removeAll(templist);
+		refresh();
+		
+	}
+	/**
+	 * 告诉服务器用户将到期的联系人删除
+	 */
+	private void requestDeleteList(final String username){
+		Handler handler=new Handler(Looper.getMainLooper()){
+			public void handleMessage(Message msg){
+				if(msg.what==ResponseTypeValue.INTENT_ERROR)
+					handleError();
+				else{
+					try {
+						JSONObject obj = new JSONObject(msg.obj.toString());
+						handleResult(obj,username);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}	
+			}
+		};
+		HttpUtil.setHandler(handler);
+		HttpUtil.postRequest(RequestUrlValue.DELETE_FRIEND_REQUEST, new Gson().toJson(new DeleteFriends(username)));
+	}
 	/**
 	 * 从网络获取与所有联系人的历史记录
 	 */
@@ -180,11 +224,17 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		Toast.makeText(getActivity(), "获取失败，请检查网络", Toast.LENGTH_LONG).show();
 	}
 	/**
-	 * 从网络获取好友列表并存储
+	 * 在本地数据库中删除联系人
 	 * @param obj
 	 */
-	protected void handleResult(JSONObject obj) {
-		// TODO Auto-generated method stub
+	protected void handleResult(JSONObject obj,String username) {
+		try {
+			if(obj.getBoolean("success")){
+				dao.deleteContact(username);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		
 		
 	}
@@ -240,7 +290,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	 * @return
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         +	 */
 	private List<EMConversation> loadConversationsWithRecentChat() {
-
+		
 		// 获取内存中的所有会话（先用load message），包括陌生人?
 		Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
 		// 过滤掉messages size为0的conversation

@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.easemob.chat.EMMessage;
 import com.xicheng.trid.DemoApplication;
 import com.xicheng.trid.hx.domain.User;
@@ -21,7 +23,7 @@ public class UserUtils {
      * @return
      */
 	
-	private static final long THREEDAY_IN_MILLISECONDS = 3 * 24 * 60 * 60 * 1000;
+	private static final long THREEDAY_IN_MILLISECONDS = 3*24*60 * 60 * 1000;
 
     public static User getUserInfor(String username){
         User user = DemoApplication.getInstance().getContactList().get(username);
@@ -78,7 +80,9 @@ public class UserUtils {
     	Date now_date = new Date();
     	long nowTime = now_date.getTime();
     	if(deadline != null){
-        	progressBar.setProgress((int)((deadline-nowTime)*100/THREEDAY_IN_MILLISECONDS));
+    		Log.i("userutil", (deadline*1000-nowTime)+"");
+    		
+        	progressBar.setProgress((int)((deadline*1000-nowTime)*100/THREEDAY_IN_MILLISECONDS));
         	
         }
     	return chat_title;
@@ -93,10 +97,10 @@ public class UserUtils {
 	    		HorizontalProgressBarWithNumber.setDefaultBarColor( 0xffa6e1fd , 0xff78ccf4);
 	    	break;
 	    	case 1:
-	    		HorizontalProgressBarWithNumber.setDefaultBarColor(0xffffffff, 0xffffffff);
+	    		HorizontalProgressBarWithNumber.setDefaultBarColor(0xffffbdbd, 0xffff7a7a);
 	    		break;
 	    	case 2:
-	    		HorizontalProgressBarWithNumber.setDefaultBarColor(0xffffffff, 0xffffffff);
+	    		HorizontalProgressBarWithNumber.setDefaultBarColor(0xffd5c4df, 0xffaa89be);
 	    		
 	    	break;
     	}
