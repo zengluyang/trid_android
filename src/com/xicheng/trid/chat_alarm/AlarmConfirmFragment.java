@@ -6,24 +6,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.easemob.EMCallBack;
-import com.easemob.chat.CmdMessageBody;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMMessage;
-import com.xicheng.trid.DemoApplication;
 import com.xicheng.trid.R;
-import com.xicheng.trid.hx.activity.ChatActivity;
-import com.xicheng.trid.hx.activity.LoginActivity;
-import com.xicheng.trid.hx.db.UserDao;
 
 public class AlarmConfirmFragment extends Fragment {
 	private static final View View = null;
 	TextView alarmContent;
 	TextView alarmTime;
+	Button but_alarm_confirm;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.i("fragmnet","onCreateView");
@@ -31,6 +24,16 @@ public class AlarmConfirmFragment extends Fragment {
 	    
 	    alarmContent = (TextView) v.findViewById(R.id.text_con_12);
 	    alarmTime = (TextView) v.findViewById(R.id.text_con_22);
+	    but_alarm_confirm  = (Button) v.findViewById(R.id.btn_con_sure);
+	    but_alarm_confirm.setOnClickListener(new  OnClickListener(){
+
+			@Override
+			public void onClick(android.view.View v) {
+				// TODO Auto-generated method stub	
+				AlarmUtils.requestSetAlarm(getActivity(),AlarmActivity.chatTo,AlarmActivity.content,AlarmActivity.time);
+			}
+	    	
+	    });
 	    return v;
 		
 	}
@@ -38,10 +41,7 @@ public class AlarmConfirmFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		alarmContent.setText(AlarmActivity.content);
-		alarmTime.setText(AlarmActivity.time);
-		
-		
-		
+		alarmTime.setText(AlarmUtils.LongToStringTime(AlarmActivity.time));
 	}
 		
 	

@@ -100,6 +100,7 @@ import com.xicheng.trid.R;
 import com.xicheng.trid.applib.controller.HXSDKHelper;
 import com.xicheng.trid.chat_alarm.AlarmActivity;
 import com.xicheng.trid.chat_alarm.AlarmSetFragment;
+import com.xicheng.trid.chat_alarm.AlarmUtils;
 import com.xicheng.trid.chat_alarm.ChatAlarm;
 import com.xicheng.trid.chat_notebook.ChatNotebookActivity;
 import com.xicheng.trid.hx.adapter.ExpressionAdapter;
@@ -206,6 +207,12 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	private boolean isloading;
 	private final int pagesize = 20;
 	private boolean haveMoreData = true;
+	TextView content1;
+	TextView content2 ;
+	TextView date1 ;
+	TextView date2;
+	TextView time1;
+	TextView time2 ;
 	//请求服务器，判断消息数量是否为空
 	private boolean msgIsEmpty=false;
 	private Button btnMore;
@@ -256,7 +263,15 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 		locationImgview = (ImageView) findViewById(R.id.btn_location);
 		iv_emoticons_normal = (ImageView) findViewById(R.id.iv_emoticons_normal);
 		iv_emoticons_checked = (ImageView) findViewById(R.id.iv_emoticons_checked);
-		alarm_preview_but1 = (ToggleButton) findViewById(R.id.but_preview_1);
+		
+		content1 = (TextView) findViewById(R.id.text_12);
+	    content2 = (TextView) findViewById(R.id.text_22);
+		date1 = (TextView) findViewById(R.id.date_1);
+		date2 = (TextView) findViewById(R.id.date_2);
+		time1 = (TextView) findViewById(R.id.time_1);
+	    time2 = (TextView) findViewById(R.id.time_2);
+	    
+	    alarm_preview_but1 = (ToggleButton) findViewById(R.id.but_preview_1);
 		alarm_preview_but1.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 
 			@Override
@@ -264,39 +279,55 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 					boolean isChecked) {
 				// TODO Auto-generated method stub
 				if(isChecked){
-					//发送开启闹钟请求
+					
 					//对比时间是否过期
-					
-					//修改数据库
-					
-					
+					String s = date1.getText().toString()+" "+time1.getText().toString();
+					long time = AlarmUtils.stringToLongTime(s).getTimeInMillis();
+					if(time < System.currentTimeMillis())
+					{
+						Toast.makeText(ChatActivity.this, "闹钟已过期", Toast.LENGTH_SHORT).show();
+						return;
+					}
+					//发送开启闹钟请求
+					AlarmUtils.requestSetAlarm(ChatActivity.this, toChatUsername, content1.getText().toString(), time);
 				}
 				else{
-                    //发送取消闹钟请求
-					
-				    //修改数据库
-					
+					String s = date1.getText().toString()+" "+time1.getText().toString();
+					long time = AlarmUtils.stringToLongTime(s).getTimeInMillis();
+                    //请求取消闹钟
+					AlarmUtils.requestCancelAlarm(ChatActivity.this, toChatUsername,content1.getText().toString(),time);		
 				}
 			}
 			
 		} );
 		alarm_preview_but2 = (ToggleButton) findViewById(R.id.but_preview_2);
 		alarm_preview_but2.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				// TODO Auto-generated method stub
-				if(isChecked){
-					//激活本地闹钟闹钟请求
-					//对比时间是否过期
-					
-					
-				}
-				else{
-                    //取消本地闹钟
-					
-				    //修改数据库
+				if(alarmPreview_layout.getVisibility() == View.VISIBLE)
+				{
+					if(isChecked){
+						//激活本地闹钟闹钟
+						//对比时间是否过期
+						
+						String s = date2.getText().toString()+" "+time2.getText().toString();
+						long time = AlarmUtils.stringToLongTime(s).getTimeInMillis();
+						if(time < System.currentTimeMillis())
+						{
+							Toast.makeText(ChatActivity.this, "闹钟已过期", Toast.LENGTH_SHORT).show();
+							return;
+						}
+						AlarmUtils.setAlarm(ChatActivity.this, toChatUsername, content2.getText().toString(), time, true);
+						
+					}
+					else{
+						String s = date2.getText().toString()+" "+time2.getText().toString();
+						long time = AlarmUtils.stringToLongTime(s).getTimeInMillis();
+	                    //取消本地闹钟
+						AlarmUtils.setAlarm(ChatActivity.this, toChatUsername,content2.getText().toString(),time,false);
+					    
+					}
 					
 				}
 			}
@@ -753,18 +784,13 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 	{
 		//查询数据库是否已设置闹钟
 		UserDao dao = new UserDao(ChatActivity.this);
-		ChatAlarm myAlarm = dao.queryAlarm(toChatUsername, DemoApplication.getInstance().getUserName());
+		ChatAlarm myAlarm = dao.queryAlarm(toChatUsername);
 		addAlarm = (ImageView) findViewById(R.id.add_alarm);
 		LinearLayout r1 = (LinearLayout) findViewById(R.id.rl_1);
 		LinearLayout r2 = (LinearLayout) findViewById(R.id.rl_2);
 		TextView text23 = (TextView) findViewById(R.id.text_23);
 		TextView text21 = (TextView) findViewById(R.id.text_21);
-		TextView content1 = (TextView) findViewById(R.id.text_12);
-		TextView content2 = (TextView) findViewById(R.id.text_22);
-		TextView date1 = (TextView) findViewById(R.id.date_1);
-		TextView date2 = (TextView) findViewById(R.id.date_2);
-		TextView time1 = (TextView) findViewById(R.id.time_1);
-		TextView time2 = (TextView) findViewById(R.id.time_2);
+		
 		
 		if(myAlarm != null)
 		{
@@ -772,15 +798,17 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			{
 				addAlarm.setVisibility(View.GONE);
 				r1.setVisibility(View.VISIBLE);
-				String[]  time = new String[2];
-				time = myAlarm.getTimeForHe().split(" ");
+				long longtime = Long.parseLong(myAlarm.getTimeForHe());
+				String stringtime =AlarmUtils.LongToStringTime(longtime);
+			    String[] time = new String[2]; 
+			    time = stringtime.split(" ");
 				//填充时间
 				date1.setText(time[0]);
 				time1.setText(time[1]);
 				//填充内容
 				content1.setText("* "+myAlarm.getContentForHe());
 				//设置开关
-				if(myAlarm.isTurnOn == 1)
+				if(myAlarm.isTurnOnForHe == 1)
 				{
 					alarm_preview_but1.setChecked(true);
 				}
@@ -799,16 +827,19 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 				text21.setVisibility(View.VISIBLE);
 				text23.setVisibility(View.GONE);
 				r2.setVisibility(View.VISIBLE);
+				
 				//填充内容
 				content2.setText("* "+myAlarm.getContentForMe());
 				//填充时间
-				String[]  time = new String[2];
-				time = myAlarm.getTimeForMe().split(" ");
+				long longtime = Long.parseLong(myAlarm.getTimeForMe());
+				String stringtime =AlarmUtils.LongToStringTime(longtime);
+			    String[] time = new String[2]; 
+			    time = stringtime.split(" ");
 				//填充时间
 				date2.setText(time[0]);
 				time2.setText(time[1]);
 				//设置开关
-				if(myAlarm.isTurnOn == 1)
+				if(myAlarm.isTurnOnForMe == 1)
 				{
 					alarm_preview_but2.setChecked(true);
 				}

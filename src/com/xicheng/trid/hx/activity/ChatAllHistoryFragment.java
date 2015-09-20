@@ -50,6 +50,7 @@ import com.xicheng.trid.hx.adapter.ChatAllHistoryAdapter;
 import com.xicheng.trid.hx.db.DataBaseExecutor;
 import com.xicheng.trid.hx.db.UserDao;
 import com.xicheng.trid.hx.domain.User;
+import com.xicheng.trid.hx.utils.UserUtils;
 import com.xicheng.trid.json.CommonInfo;
 import com.xicheng.trid.json.FriendListRequest;
 import com.xicheng.trid.main.MainActivity;
@@ -211,15 +212,19 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		if (item.getItemId() == R.id.delete_message) {
 			deleteMessage = true;
 			handled = true;
-		} else if (item.getItemId() == R.id.delete_conversation) {
-			deleteMessage = false;
+		} else if (item.getItemId() == R.id.delete_contact) {
+			deleteMessage = true;
 			handled = true;
+			EMConversation tobeDeleteCons = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+			// 删除此会话
+			EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
+			//删除好友
+			requestDeleteFriend(tobeDeleteCons.getUserName());
+			//更新内存中的好友列表
+			UserDao dao = new UserDao(getActivity());
+	    	dao.deleteContact(tobeDeleteCons.getUserName());
+	    	DemoApplication.getInstance().updateContactList();
 		}
-		EMConversation tobeDeleteCons = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-		// 删除此会话
-		EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
-		
-		
 		return handled ? true : super.onContextItemSelected(item);
 	}
 
@@ -253,7 +258,20 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		List<Pair<Long, EMConversation>> sortList = new ArrayList<Pair<Long, EMConversation>>();
 		synchronized (conversations) {
 			for (EMConversation conversation : conversations.values()) {
-				if (conversation.getAllMessages().size() != 0 ) {
+				String username = conversation.getUserName(); 
+				User user = UserUtils.getUserInfor(username);
+		    	Long deadline  = user.getAvatar();
+		    	if(deadline !=0 && deadline < System.currentTimeMillis())
+		    	{
+		    		//三天到期，发送解除好友请求，删除对话
+		    		EMChatManager.getInstance().deleteConversation(username);
+		    		requestDeleteFriend(username);
+		    		//更新内存中的好友列表
+		    		UserDao dao = new UserDao(getActivity());
+                	dao.deleteContact(username);
+                	DemoApplication.getInstance().updateContactList();
+		    	}
+		    	else if (conversation.getAllMessages().size() != 0 ) {
 						sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
 				}
 			}
@@ -324,5 +342,23 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 
     @Override
     public void onClick(View v) {        
+    }
+    
+    public void requestDeleteFriend(String peer_tel){
+    	String url = "http://101.200.89.240/index.php?r=contact/delete-friend";
+	    JSONObject obj =  new JSONObject();
+	    try {
+//			obj.put("token", ConnInfo.TOKEN );
+//			obj.put("tel", ConnInfo.HUANXIN_ID);
+			obj.put("type","delete_friend_request");
+			obj.put("peer_tel", peer_tel);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	   
+	    System.out.println(obj.toString());
+		//向服务器请求
+		HttpUtil.postRequest(url, obj.toString());
     }
 }

@@ -99,7 +99,7 @@ public class HttpUtil {
 		httppost.addHeader("Content-Type", "application/json");
 		Log.i("HttpUtil", "will post this data:" + json);
 		try {
-			httppost.setEntity(new StringEntity(json));
+			httppost.setEntity(new StringEntity(json,"utf-8"));
 		} catch (UnsupportedEncodingException e) {			
 			e.printStackTrace();
 		}

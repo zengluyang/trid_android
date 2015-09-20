@@ -58,14 +58,20 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 	            + UserDao.COLUMN_NAME_TIME + " TEXT PRIMARY KEY, "
 	            + UserDao.COLUMN_NAME_WHO + " TEXT);";
 
-	// ALARM table		
-	private static final String CREATE_ALARM_TABLE = "CREATE TABLE "
-			+ UserDao.ALARM_TABLE_NAME + " ("
-			+ UserDao.COLUMN_NAME_WRITER + " TEXT, "
-			+ UserDao.COLUMN_NAME_FOR_WHO + " TEXT,"
-			+ UserDao.COLUMN_NAME_CONTENT + " TEXT, "
-			+ UserDao.COLUMN_NAME_TIME + " TEXT PRIMARY KEY," 
-		    + UserDao.COLUMN_NAME_SWITCH + " INT);";
+		// ALARM table		
+		private static final String CREATE_ALARM_FOR_ME_TABLE = "CREATE TABLE "
+				+ UserDao.ALARM_FOR_ME_TABLE_NAME + " ("
+				+ UserDao.COLUMN_NAME_WRITER + " TEXT PRIMARY KEY, "
+				+ UserDao.COLUMN_NAME_CONTENT + " TEXT, "
+				+ UserDao.COLUMN_NAME_TIME + " TEXT," 
+			    + UserDao.COLUMN_NAME_STATE + " INT);";
+		
+		private static final String CREATE_ALARM_FOR_OTHERS_TABLE = "CREATE TABLE "
+				+ UserDao.ALARM_FOR_HE_TABLE_NAME + " ("
+				+ UserDao.COLUMN_NAME_FOR_WHO + " TEXT PRIMARY KEY,"
+				+ UserDao.COLUMN_NAME_CONTENT + " TEXT, "
+				+ UserDao.COLUMN_NAME_TIME + " TEXT," 
+			    + UserDao.COLUMN_NAME_STATE + " INT);";
 	
 	// settings table
 	private static final String CREATE_SETTINGS_TABLE = "CREATE TABLE "
@@ -95,7 +101,8 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 		db.execSQL(CREATE_PREF_TABLE);
 		db.execSQL(ROBOT_TABLE_CREATE);
 		//db.execSQL(CREATE_NOTES_TABLE);
-		db.execSQL(CREATE_ALARM_TABLE);
+		db.execSQL(CREATE_ALARM_FOR_ME_TABLE);
+		db.execSQL(CREATE_ALARM_FOR_OTHERS_TABLE);
 		db.execSQL(CREATE_SETTINGS_TABLE);//创建本地设置表
 	}
 	

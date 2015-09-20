@@ -308,61 +308,144 @@ public class DemoDBManager {
 		return users;
 	}
 
-	public ChatAlarm queryAlarm(String username, String myName) {
-		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		ChatAlarm myAlarm = new ChatAlarm();
-		if (db.isOpen()) {
-			Cursor cursor = db.rawQuery("select * from "
-					+ UserDao.ALARM_TABLE_NAME, null);
-			if (cursor != null) {
+    public ChatAlarm queryAlarm(String othername)
+    {
+  	  SQLiteDatabase db = dbHelper.getReadableDatabase();
+  	  ChatAlarm myAlarm = new ChatAlarm();
+  	  if (db.isOpen()) {
+			Cursor cursor = db.rawQuery("select * from " + UserDao.ALARM_FOR_ME_TABLE_NAME, null);
 
+			if(cursor!= null){
+				
 				while (cursor.moveToNext()) {
-					String writer = cursor.getString(0); // 获取第一列的值,第一列的索引从0开始
-					if (writer.equals(username)) {
-						String for_who = cursor.getString(1);// 获取第二列的值
-						if (for_who.equals(myName)) {
-							myAlarm.setContentForMe(cursor.getString(2));
-							myAlarm.setTimeForMe(cursor.getString(3));
-							myAlarm.switchAlarm(cursor.getInt(4));
-						}
-
-					} else if (writer.equals(myName)) {
-						String for_who = cursor.getString(1);// 获取第二列的值
-						if (for_who.equals(username)) {
-							myAlarm.setContentForHe(cursor.getString(2));
-							myAlarm.setTimeForHe(cursor.getString(3));
-						}
-					}
+				   String writer  = cursor.getString(0); //获取第一列的值,第一列的索引从0开始
+				   if(writer.equals(othername))
+				   {
+					 
+						 myAlarm.setContentForMe(cursor.getString(1));
+						 myAlarm.setTimeForMe(cursor.getString(2));
+						 myAlarm.switchAlarmForMe(cursor.getInt(3));
+				   }
+				   
 				}
 				cursor.close();
-				return myAlarm;
+				
 			}
-
-		}
-		return null;
-	}
-
-	public void saveAlarm(String chatTo, String myName, String content,
-			String time) {
-		SQLiteDatabase db = null;
-		// 插入一个记录
-		try {
-			db = dbHelper.getReadableDatabase();
-			if (db.isOpen()) {
-				ContentValues values = new ContentValues();
-				values.put(UserDao.COLUMN_NAME_WRITER, myName);
-				values.put(UserDao.COLUMN_NAME_FOR_WHO, chatTo);
-				values.put(UserDao.COLUMN_NAME_CONTENT, content);
-				values.put(UserDao.COLUMN_NAME_TIME, time);
-				db.insert(UserDao.ALARM_TABLE_NAME, null, values);
+			
+			Cursor cursor2 = db.rawQuery("select * from " + UserDao.ALARM_FOR_HE_TABLE_NAME, null);
+			if(cursor2!= null){
+				
+				while (cursor2.moveToNext()) {
+				   String forWho  = cursor2.getString(0); //获取第一列的值,第一列的索引从0开始
+				   if(forWho.equals(othername))
+				   {
+					 
+						 myAlarm.setContentForHe(cursor2.getString(1));
+						 myAlarm.setTimeForHe(cursor2.getString(2));
+						 myAlarm.switchAlarmForHe(cursor2.getInt(3));
+				   }
+				   
+				}
+				cursor2.close();
+				
 			}
-
-		} catch (Exception e) {
-			// TODO: handle exception
-		} finally {
-			db.close();
+			
+			return myAlarm;
 		}
+  	  return null;
+    }
+    
+    
+    public void saveAlarmForMe(String writer, String content, Long time,Boolean state)
+    {
+  	  
+  	  int int_state = state?1:0;
+  	  String s_content = "\""+content+"\"";
+  	  SQLiteDatabase db = null;
+  	  //查找
+  	  try{
+  		  db = dbHelper.getWritableDatabase();
+  		  if(db.isOpen())
+      	  {
+      		  Cursor cursor = db.rawQuery("select " + UserDao.COLUMN_NAME_WRITER+" from " + UserDao.ALARM_FOR_ME_TABLE_NAME, null);
+          	  if(cursor!= null){
+      				
+      				while (cursor.moveToNext()) {
+      				   String db_writer  = cursor.getString(0); //获取第一列的值,第一列的索引从0开始
+      				   if(db_writer.equals(writer))
+      				   {
+      					   db.execSQL("update "+ UserDao.ALARM_FOR_ME_TABLE_NAME+ " set "+UserDao.COLUMN_NAME_STATE+" = " + int_state + " WHERE "+ UserDao.COLUMN_NAME_WRITER +" = "+writer+";");
+      					   db.execSQL("update "+ UserDao.ALARM_FOR_ME_TABLE_NAME+ " set "+UserDao.COLUMN_NAME_CONTENT+" = " + s_content + " WHERE "+ UserDao.COLUMN_NAME_WRITER +" = "+writer+";");
+      					   db.execSQL("update "+ UserDao.ALARM_FOR_ME_TABLE_NAME+ " set "+UserDao.COLUMN_NAME_TIME+" = " + time + " WHERE "+ UserDao.COLUMN_NAME_WRITER +" = "+writer+";");
+      					   
+      					   db.close();
+      					   return;
+      				   }  
+      				}
+      			}
+          	  
+          	  //没有则插入
+          	  ContentValues values = new ContentValues();
+      	      values.put(UserDao.COLUMN_NAME_WRITER , writer);
+      	      values.put(UserDao.COLUMN_NAME_CONTENT, content);
+      	      values.put(UserDao.COLUMN_NAME_TIME, time);
+      	      values.put(UserDao.COLUMN_NAME_STATE, int_state);
+      	      db.insert(UserDao.ALARM_FOR_ME_TABLE_NAME, null, values);
+      		  
+      	  }
+  		  
+  	  }catch (Exception e) {
+  	      // TODO: handle exception
+  	    } finally {
+  	      db.close();
+  	    }
 
-	}
+    }
+    
+    
+    public void saveAlarmForHe(String forWho, String content, Long time,Boolean state)
+    {
+  	  int int_state = state?1:0;
+  	  String s_content = "\""+content+"\"";
+  	  SQLiteDatabase db = null;
+  	  //查找
+  	  try{
+  		  db = dbHelper.getWritableDatabase();
+  		  if(db.isOpen())
+      	  {
+      		  Cursor cursor = db.rawQuery("select " + UserDao.COLUMN_NAME_FOR_WHO+" from " + UserDao.ALARM_FOR_HE_TABLE_NAME, null);
+          	  if(cursor!= null){
+      				
+      				while (cursor.moveToNext()) {
+      				   String db_forWho  = cursor.getString(0); //获取第一列的值,第一列的索引从0开始
+      				   if(db_forWho.equals(forWho))
+      				   {   
+      					   System.out.println("update "+ UserDao.ALARM_FOR_HE_TABLE_NAME+ " set "+UserDao.COLUMN_NAME_STATE+" = " + int_state + " WHERE "+ UserDao.COLUMN_NAME_FOR_WHO +" = "+forWho+";");
+      					   db.execSQL("update "+ UserDao.ALARM_FOR_HE_TABLE_NAME+ " set "+UserDao.COLUMN_NAME_STATE+" = " + int_state+ " WHERE "+ UserDao.COLUMN_NAME_FOR_WHO +" = "+forWho+";");
+      					   db.execSQL("update "+ UserDao.ALARM_FOR_HE_TABLE_NAME+ " set "+UserDao.COLUMN_NAME_CONTENT+" = " + s_content + " WHERE "+ UserDao.COLUMN_NAME_FOR_WHO +" = "+forWho+";");
+      					   db.execSQL("update "+ UserDao.ALARM_FOR_HE_TABLE_NAME+ " set "+UserDao.COLUMN_NAME_TIME+" = " + time + " WHERE "+ UserDao.COLUMN_NAME_FOR_WHO +" = "+forWho+";");
+      					   db.close();
+      					   return;
+      				   }  
+      				}
+      			}
+          	  
+          	  //没有则插入
+          	  ContentValues values = new ContentValues();
+      	      values.put(UserDao.COLUMN_NAME_FOR_WHO , forWho);
+      	      values.put(UserDao.COLUMN_NAME_CONTENT, content);
+      	      values.put(UserDao.COLUMN_NAME_TIME, time);
+      	      values.put(UserDao.COLUMN_NAME_STATE, int_state);
+      	      db.insert(UserDao.ALARM_FOR_HE_TABLE_NAME, null, values);
+      		  
+      	  }
+  		  
+  	  }catch (Exception e) {
+  	      // TODO: handle exception
+  	    } finally {
+  	      db.close();
+  	    }
+
+    }
 
 }

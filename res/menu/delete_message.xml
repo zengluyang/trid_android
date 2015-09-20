@@ -1,10 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item
-        android:id="@+id/delete_conversation"
-        android:title="@string/delete_conversation"/>
+        android:id="@+id/delete_contact"
+        android:title="@string/delete_contact"/>
     
     <item
         android:id="@+id/delete_message"
-        android:title="@string/delete_conversation_messages"/>
+        android:title="@string/delete_messages"/>
+    
+</menu>
     
 </menu>

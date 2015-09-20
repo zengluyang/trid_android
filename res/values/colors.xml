@@ -191,12 +191,15 @@
 	<color name="navy">#000080</color><!--海军色 --> 
 	<color name="black">#000000</color><!--黑色 --> 
 	<color name="transparent">#00000000</color><!-- 透明 -->
+	
 	<color name="loveme_reach">#ff78ccf4</color><!---->
 	<color name="loveme_unreach">#ffa6e1fd</color><!-- -->
-	<color name="mylove_reach">#000000</color><!-- --> 
-	<color name="mylove_unreach">#000000</color><!-- --> 
-	<color name="stranger_reach">#000000</color><!----> 
-	<color name="stranger_unreach">#000000</color><!-- -->
+	<color name="mylove_reach">#FFffbdbd</color><!-- --> 
+	<color name="mylove_unreach">#FFfe7a7a</color><!-- --> 
+	<color name="stranger_reach">#FFaa89be</color><!----> 
+	<color name="stranger_unreach">#FFaa89be</color><!-- -->
+	
+	
 	<color name="more_but_background">#4ceeeeee</color><!--聊天more键盘背景 -->
 	<color name="chattime_bg1">#20878484</color><!--聊天时间背景 -->
 	<color name="chattime_bg">#00000000</color><!--聊天时间背景 -->

@@ -6,7 +6,8 @@ public class ChatAlarm {
 	String time_for_he = null;
 	String content_for_me = null;
 	String content_for_he = null;
-	public int isTurnOn = 1;
+	public int isTurnOnForMe = 1;
+	public int isTurnOnForHe = 1;
 
 	public void setTimeForMe(String time)
 	{
@@ -48,9 +49,13 @@ public class ChatAlarm {
 		return content_for_he;
 	}
 	
-	public void switchAlarm(int set)
+	public void switchAlarmForHe(int set)
 	{
-	    this.isTurnOn = set;
+	    this.isTurnOnForHe = set;
 	}
-
+	
+	public void switchAlarmForMe(int set)
+	{
+	    this.isTurnOnForMe = set;
+	}
 }

@@ -82,6 +82,14 @@ public class DemoApplication extends Application {
 	public void setContactList(Map<String, User> contactList) {
 	    hxSDKHelper.setContactList(contactList);
 	}
+	
+	/**
+	 * 更新内存中好友list
+     */
+	 
+	 public void  updateContactList() {
+	    hxSDKHelper.updateContactList();
+	}
 
 	/**
 	 * 获取当前登陆用户名

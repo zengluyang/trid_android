@@ -13,7 +13,9 @@
  */
 package com.xicheng.trid;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +54,7 @@ import com.xicheng.trid.applib.model.HXNotifier;
 import com.xicheng.trid.applib.model.HXSDKModel;
 import com.xicheng.trid.applib.model.HXNotifier.HXNotificationInfoProvider;
 import com.xicheng.trid.chat_alarm.AlarmActivity;
+import com.xicheng.trid.chat_alarm.AlarmUtils;
 import com.xicheng.trid.hx.activity.ChatActivity;
 import com.xicheng.trid.hx.db.UserDao;
 import com.xicheng.trid.hx.domain.RobotUser;
@@ -108,6 +111,9 @@ public class DemoHXSDKHelper extends HXSDKHelper{
         EMChatOptions options = EMChatManager.getInstance().getChatOptions();
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());  
     }
+    
+    
+    
 
     
     
@@ -165,20 +171,35 @@ public class DemoHXSDKHelper extends HXSDKHelper{
                     if(action.equals(Constant.ACTION_SET_ALARM))
                     {
                     	String from = message.getFrom();
-                    	String time ;
+                    	long time ;
                     	String content ;
 						try {
-							time = message.getStringAttribute("time");
+							time = Long.parseLong(message.getStringAttribute("time"));
 							content = message.getStringAttribute("content");
 							//设置闹钟
-	                    	AlarmActivity.setAlarm(DemoApplication.getInstance().getApplicationContext(),from,content,time);
-	                    	//存入数据库
-	                    	UserDao dao = new UserDao(DemoApplication.getInstance().getApplicationContext());
-	        				dao.SaveAlarm(DemoApplication.getInstance().getUserName(), from ,content, time);
+							AlarmUtils.setAlarm(DemoApplication.getInstance().getApplicationContext(),from,content,time,true);
 						} catch (EaseMobException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+                    	
+                    }
+                    else if(action.equals(Constant.ACTION_CANCEL_ALARM)){
+                    	String from = message.getFrom();
+                    	long time=0 ;
+                    	String content="" ;
+                    	try {
+							time = Long.parseLong(message.getStringAttribute("time"));
+							content = message.getStringAttribute("content");
+						} catch (NumberFormatException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (EaseMobException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						//设置闹钟
+						AlarmUtils.setAlarm(DemoApplication.getInstance().getApplicationContext(),from,content,time,false);
                     	
                     }
                     else if(action.equals(Constant.ACTION_ADD_FRIEND))
@@ -191,13 +212,20 @@ public class DemoHXSDKHelper extends HXSDKHelper{
 						try {
 							obj = message.getJSONObjectAttribute("friend");
 							long avatar = obj.getLong("expire");
-	        			    user.setAvatar(avatar);
+							long avatar_ms =avatar*1000 ;
+							
+					    	Date date = new Date(avatar_ms);
+					    	SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					    	Log.i("loveme dealine",s.format(date));
+	        			    user.setAvatar(avatar_ms);
 	        			    user.setType(obj.getInt("type"));
 	        			    user.setTel(obj.getString("peer_tel"));
 	        			    user.setUsername(obj.getString("huanxin_id"));
 	        			    if (obj.getString("chat_title")!= null)
 	        			    user.setChatTitle(obj.getString("chat_title"));
 	                    	dao.saveContact(user);
+	                    	//更新内存中的好友列表
+	                    	DemoApplication.getInstance().updateContactList();
 						} catch (EaseMobException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -461,6 +489,14 @@ public class DemoHXSDKHelper extends HXSDKHelper{
         return contactList;
     }
     
+    /**
+   	 * 更新内存中好友list
+        */
+   	 public void  updateContactList() {
+   	    this.contactList = ((DemoHXSDKModel) getModel()).getContactList();
+   	}
+   	 
+   	 
 	public Map<String, RobotUser> getRobotList() {
 		if (getHXId() != null && robotList == null) {
 			robotList = ((DemoHXSDKModel) getModel()).getRobotList();

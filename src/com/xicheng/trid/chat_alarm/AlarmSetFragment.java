@@ -1,6 +1,8 @@
 package com.xicheng.trid.chat_alarm;
 
 
+import java.util.Calendar;
+
 import com.xicheng.trid.R;
 import com.xicheng.trid.timepicker.TimePicker;
 
@@ -35,7 +37,7 @@ public class AlarmSetFragment  extends Fragment{
 	    alarm_sure = (Button) v.findViewById(R.id.btn_sure_alarm);
 	    
 	    return v;
-		
+		                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 	}
 	@Override
 	public void  onActivityCreated(Bundle savedInstanceState){
@@ -44,7 +46,9 @@ public class AlarmSetFragment  extends Fragment{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				AlarmActivity.time= timePicker.getTime();
+				String temp_time = timePicker.getTime();
+				Calendar c = AlarmUtils.stringToLongTime(temp_time);
+				AlarmActivity.time= c.getTimeInMillis();
 				AlarmActivity.content = contentText.getText().toString();
 				if(AlarmActivity.content .equals(""))
 				{

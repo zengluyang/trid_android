@@ -40,11 +40,13 @@ public class UserDao {
 	public static final String COLUMN_NAME_DISABLED_IDS = "disabled_ids";
 	
 	
-	public static final String ALARM_TABLE_NAME = "alarm_table";
+
+	public static final String ALARM_FOR_ME_TABLE_NAME = "alarm_for_me_table";
+	public static final String ALARM_FOR_HE_TABLE_NAME = "alarm_for_he_table";
 	public static final String COLUMN_NAME_CONTENT = "alarm_content";
 	public static final String COLUMN_NAME_TIME = "alarm_time";
 	public static final String COLUMN_NAME_WRITER = "alarm_writer";
-	public static final String COLUMN_NAME_SWITCH = "alarm_on_off";
+	public static final String COLUMN_NAME_STATE = "alarm_on_off";
 	public static final String COLUMN_NAME_FOR_WHO = "alarm_for_who";
 	
 	
@@ -141,13 +143,23 @@ public class UserDao {
     	DemoDBManager.getInstance().saveRobotList(robotList);
     }
     
-    public ChatAlarm queryAlarm(String username, String myName)
+    public ChatAlarm queryAlarm(String username)
     {
-    	return DemoDBManager.getInstance().queryAlarm(username,myName);
+    	return DemoDBManager.getInstance().queryAlarm(username);
     }
-    public void SaveAlarm(String username, String myName, String content, String time)
+    /**
+     * 为谁
+     * 内容
+     * 时间
+     * 闹钟状态*/
+    public void SaveAlarmForHe(String forWho, String content, Long time, Boolean state)
     {
-    	DemoDBManager.getInstance().saveAlarm(username,myName, content, time);
+    	DemoDBManager.getInstance().saveAlarmForHe(forWho, content, time, state);
+    	
+    }
+    public void SaveAlarmForMe(String writer, String content, Long time, Boolean state)
+    {
+    	DemoDBManager.getInstance().saveAlarmForMe(writer, content, time, state);
     	
     }
 }

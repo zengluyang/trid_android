@@ -1,5 +1,6 @@
 package com.xicheng.trid.hx.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.json.JSONObject;
 
 import com.easemob.chat.EMMessage;
 import com.xicheng.trid.DemoApplication;
+import com.xicheng.trid.R;
 import com.xicheng.trid.hx.domain.User;
 import com.xicheng.trid.progressbar.HorizontalProgressBarWithNumber;
 import com.xicheng.trid.progressbar.RoundProgressBarWidthNumber;
@@ -34,11 +36,35 @@ public class UserUtils {
     }
     
     /**
-     * 设置消息中用户头像
+     * 设置聊天消息中用户头像颜色
+     * */
+    public static void  setDefaultBarColor(int type){
+    	
+    	switch(type)
+    	{
+	    	case 0:
+	    		HorizontalProgressBarWithNumber.setDefaultBarColor(DemoApplication.getInstance().getResources().getColor(R.color.mylove_reach),
+	    				DemoApplication.getInstance().getResources().getColor(R.color.mylove_unreach));
+	    		
+	    	break;
+	    	case 1:
+	    		HorizontalProgressBarWithNumber.setDefaultBarColor( DemoApplication.getInstance().getResources().getColor(R.color.loveme_reach),
+	    				DemoApplication.getInstance().getResources().getColor(R.color.loveme_unreach));
+	    		
+	    		break;
+	    	case 2:
+	    		HorizontalProgressBarWithNumber.setDefaultBarColor(DemoApplication.getInstance().getResources().getColor(R.color.mylove_reach),
+	    				DemoApplication.getInstance().getResources().getColor(R.color.mylove_unreach));
+	    	break;
+    	}
+    	
+    }
+    
+    /**
+     * 设置聊天消息中用户头像进度
      * @param username
      */
-    
-    public static void setUserAvatar(EMMessage message, RoundProgressBarWidthNumber progressBar,Long startTime){
+    public static void setUserAvatar(EMMessage message, RoundProgressBarWidthNumber progressBar,Long deadline){
     	//自己的头像不设置
     	if(message.direct == EMMessage.Direct.SEND)
     	{
@@ -46,14 +72,23 @@ public class UserUtils {
     	}
     
     	Long msgTime = message.getMsgTime();
+    	Date date = new Date(msgTime);
+    	SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	System.out.println(s.format(date));
+    	
+    	Date date1 = new Date(deadline);
+    	SimpleDateFormat s1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	System.out.println(s1.format(date));
+    	
         if(msgTime != null){
-        	progressBar.setProgress((int)(100-(msgTime -startTime)*100/THREEDAY_IN_MILLISECONDS));
+        	int temp =  (int)((deadline-msgTime)*100/THREEDAY_IN_MILLISECONDS);
+        	progressBar.setProgress((int)((deadline-msgTime)*100/THREEDAY_IN_MILLISECONDS));
           
         }
     }
     
     /**
-     * 设置对话栏的用户头像
+     * 设置历史栏的用户头像
      * 根据username获取该联系人的到期时间（avatar）
      * */
     public static String  getUserAvatar_ChatTitle(String username, RoundProgressBarWidthNumber progressBar){
@@ -65,13 +100,17 @@ public class UserUtils {
     	switch(type)
     	{
 	    	case 0:
-	    		progressBar.setBarColor( 0xffa6e1fd , 0xff78ccf4);
+	    		progressBar.setBarColor(DemoApplication.getInstance().getResources().getColor(R.color.mylove_reach),
+	    				DemoApplication.getInstance().getResources().getColor(R.color.mylove_unreach));
+	    		
 	    	break;
 	    	case 1:
-	    		progressBar.setBarColor(0xffffffff, 0xffffffff);
+	    		progressBar.setBarColor(DemoApplication.getInstance().getResources().getColor(R.color.loveme_reach),
+	    				DemoApplication.getInstance().getResources().getColor(R.color.loveme_unreach));
 	    		break;
 	    	case 2:
-	    		progressBar.setBarColor(0xffffffff, 0xffffffff);
+	    		progressBar.setBarColor(DemoApplication.getInstance().getResources().getColor(R.color.stranger_reach),
+	    				DemoApplication.getInstance().getResources().getColor(R.color.stranger_unreach));
 	    		
 	    	break;
     	}
@@ -85,24 +124,7 @@ public class UserUtils {
     	
     }
     
-    public static void  setDefaultBarColor(int type){
-    	
-    	switch(type)
-    	{
-	    	case 0:
-	    		HorizontalProgressBarWithNumber.setDefaultBarColor( 0xffa6e1fd , 0xff78ccf4);
-	    	break;
-	    	case 1:
-	    		HorizontalProgressBarWithNumber.setDefaultBarColor(0xffffffff, 0xffffffff);
-	    		break;
-	    	case 2:
-	    		HorizontalProgressBarWithNumber.setDefaultBarColor(0xffffffff, 0xffffffff);
-	    		
-	    	break;
-    	}
-    	
-    	
-    }
+    
     
   
     

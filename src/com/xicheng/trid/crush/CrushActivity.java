@@ -1,5 +1,7 @@
 package com.xicheng.trid.crush;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Hashtable;
 
 import org.json.JSONException;
@@ -11,6 +13,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.exceptions.EaseMobException;
 import com.google.gson.Gson;
+import com.xicheng.trid.DemoApplication;
 import com.xicheng.trid.R;
 import com.xicheng.trid.hx.activity.BaseActivity;
 import com.xicheng.trid.hx.db.UserDao;
@@ -72,13 +75,21 @@ public class CrushActivity extends BaseActivity {
 					//存入该联系人信息到数据库库
 					String from = friend.getString("huanxin_id");
 					User user = new User(from);
-					user.setAvatar(friend.getLong("expire"));
+					user.setAvatar(friend.getLong("expire")*1000);
+					
+					Date date = new Date(friend.getLong("expire")*1000);
+			    	SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			    	Log.i("mylove dealine",s.format(date));
     			    user.setType(friend.getInt("type"));
     			    user.setTel(friend.getString("peer_tel"));
     			    if (friend.getString("chat_title")!= null)
-    			    user.setChatTitle(friend.getString("chat_title"));
+    			    {
+    			    	 user.setChatTitle(friend.getString("chat_title"));
+    			    }
     			    UserDao dao = new UserDao(CrushActivity.this);
                 	dao.saveContact(user);
+                	//更新内存中的好友列表
+                	DemoApplication.getInstance().updateContactList();
 					//发送第一条信息
 					EMMessage message = EMMessage.createSendMessage(EMMessage.Type.TXT);
 					//设置消息body

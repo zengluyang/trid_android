@@ -628,7 +628,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		getMenuInflater().inflate(R.menu.context_tab_contact, menu);
+		
 	}
 
 	// 处理服务器返回的JSONObject对象
