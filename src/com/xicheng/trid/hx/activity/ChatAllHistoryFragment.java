@@ -92,8 +92,8 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		//requestList();
 		conversationList.addAll(loadConversationsWithRecentChat());
 		listView = (ListView) getView().findViewById(R.id.list);
-		//executor=new DataBaseExecutor(getActivity());
-		//executor.insertConList("test", null, null, 0);
+		executor=new DataBaseExecutor(getActivity());
+		Log.i(TAG+"MSGBODY",executor.getColumnValue(1, "msgbody")+" ");
 		if(conversationList.size()==0){
 			requestConver();
 		}
@@ -138,27 +138,6 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		});
 	}
 
-	private void requestList() {
-		// TODO Auto-generated method stub
-		handler=new Handler(Looper.getMainLooper()){
-			public void handleMessage(Message msg)
-			{
-				if(msg.what==ResponseTypeValue.INTENT_ERROR)
-					handleError();
-				else{
-					try {
-						JSONObject obj = new JSONObject(msg.obj.toString());
-						handleResult(obj);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}	
-			}
-		};
-		HttpUtil.setHandler(handler);
-		HttpUtil.postRequest(RequestUrlValue.GET_FRIEND_REQUEST, new Gson().toJson(new FriendListRequest()));
-		
-	}
 	/**
 	 * 从网络获取与所有联系人的历史记录
 	 */
@@ -187,11 +166,16 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	 */
 	private void handleConverResult(JSONObject obj){
 		conversationList=JsonParser.getInstance().getConversationList(obj);
+		for(int i=0;i<conversationList.size();i++){
+			EMChatManager.getInstance().importMessages(conversationList.get(i).getAllMessages());
+		}
 		Log.i(TAG+"SIZE",conversationList.size()+"");
 		
 		adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
 		listView.setAdapter(adapter);
 	}
+	
+
 	private void handleError(){
 		Toast.makeText(getActivity(), "获取失败，请检查网络", Toast.LENGTH_LONG).show();
 	}

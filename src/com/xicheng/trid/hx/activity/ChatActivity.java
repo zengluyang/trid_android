@@ -996,6 +996,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			message.setReceipt(toChatUsername);
 			// 把messgage加到conversation中
 			conversation.addMessage(message);
+			
 			// 通知adapter有消息变动，adapter会根据加入的这条message显示消息和调用sdk的发送方法
 			adapter.refreshSelectLast();
 			mEditTextContent.setText("");
