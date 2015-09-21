@@ -1,0 +1,17 @@
+package com.xicheng.trid.utils;
+/**
+ * 单例模式,json解析器
+ * @author zyl
+ *
+ */
+public class JsonParser {
+	private static JsonParser parser=null;
+	private JsonParser(){}
+	public static synchronized JsonParser getInstance(){
+		if(parser==null){
+			parser=new JsonParser();
+		}
+		return parser;
+	}
+	
+}

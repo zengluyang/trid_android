@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.xicheng.trid.value.RequestTypeValue"/>
+<fullyQualifiedTypeName name="com.xicheng.trid.json.HistoryMsg"/>
+<fullyQualifiedTypeName name="com.easemob.chat.EMMessage"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="org.json.JSONArray"/>
+<fullyQualifiedTypeName name="com.easemob.chat.TextMessageBody"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="com.easemob.chat.EMMessage.ChatType"/>
+<fullyQualifiedTypeName name="com.easemob.chat.EMMessage.Type"/>
+<fullyQualifiedTypeName name="com.xicheng.trid.utils.JsonParser"/>
+<fullyQualifiedTypeName name="android.os.Handler"/>
+<fullyQualifiedTypeName name="android.os.Looper"/>
+<fullyQualifiedTypeName name="com.xicheng.trid.utils.HttpUtil"/>
+<fullyQualifiedTypeName name="com.xicheng.trid.value.RequestUrlValue"/>
+<fullyQualifiedTypeName name="com.xicheng.trid.value.ConnInfo"/>
+<fullyQualifiedTypeName name="com.xicheng.trid.json.FriendListRequest"/>
+<fullyQualifiedTypeName name="com.google.gson.Gson"/>
+<fullyQualifiedTypeName name="org.apache.http.client.HttpClient"/>
+<fullyQualifiedTypeName name="org.apache.http.params.BasicHttpParams"/>
+<fullyQualifiedTypeName name="org.apache.http.params.HttpProtocolParams"/>
+<fullyQualifiedTypeName name="org.apache.http.params.HttpConnectionParams"/>
+<fullyQualifiedTypeName name="org.apache.http.conn.scheme.SchemeRegistry"/>
+<fullyQualifiedTypeName name="org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager"/>
+<fullyQualifiedTypeName name="org.apache.http.impl.client.DefaultHttpClient"/>
+<fullyQualifiedTypeName name="org.apache.http.conn.scheme.Scheme"/>
+<fullyQualifiedTypeName name="org.apache.http.conn.scheme.PlainSocketFactory"/>
+<fullyQualifiedTypeName name="javax.net.ssl.SSLSocketFactory"/>
+<fullyQualifiedTypeName name="org.apache.http.HttpVersion"/>
+<fullyQualifiedTypeName name="org.apache.http.protocol.HTTP"/>
+<fullyQualifiedTypeName name="com.xicheng.trid.value.ResponseTypeValue"/>
+</qualifiedTypeNameHistroy>
