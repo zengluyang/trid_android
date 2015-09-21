@@ -388,20 +388,5 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
     public void onClick(View v) {        
     }
     
-    public void requestDeleteFriend(String peer_tel){
-    	String url = "http://101.200.89.240/index.php?r=contact/delete-friend";
-	    JSONObject obj =  new JSONObject();
-	    try {
-			obj.put("tel", HXSDKHelper.getInstance().getHXId());
-			obj.put("token", HXSDKHelper.getInstance().getToken());
-			obj.put("type","delete_friend_request");
-			obj.put("peer_tel", peer_tel);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    System.out.println(obj.toString());
-		//向服务器请求
-		HttpUtil.postRequest(url, obj.toString());
-    }
+   
 }
