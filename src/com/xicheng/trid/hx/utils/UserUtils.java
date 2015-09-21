@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.easemob.chat.EMMessage;
 import com.xicheng.trid.DemoApplication;
 import com.xicheng.trid.R;
@@ -23,7 +25,7 @@ public class UserUtils {
      * @return
      */
 	
-	private static final long THREEDAY_IN_MILLISECONDS = 3 * 24 * 60 * 60 * 1000;
+	private static final long THREEDAY_IN_MILLISECONDS = 3*24*60 * 60 * 1000;
 
     public static User getUserInfor(String username){
         User user = DemoApplication.getInstance().getContactList().get(username);
@@ -117,15 +119,16 @@ public class UserUtils {
     	Date now_date = new Date();
     	long nowTime = now_date.getTime();
     	if(deadline != null){
-        	progressBar.setProgress((int)((deadline-nowTime)*100/THREEDAY_IN_MILLISECONDS));
+    		Log.i("userutil", (deadline*1000-nowTime)+"");
+    		
+        	progressBar.setProgress((int)((deadline*1000-nowTime)*100/THREEDAY_IN_MILLISECONDS));
         	
         }
     	return chat_title;
     	
     }
     
-    
-    
+
   
     
     public static List<User> createUserList(JSONArray jArray)

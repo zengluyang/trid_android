@@ -592,8 +592,7 @@ public class MessageAdapter extends BaseAdapter{
 				break;
 			default:
 				// 发送消息
-				//sendMsgInBackground(message, holder);
-				break;
+				sendMsgInBackground(message, holder);
 			}
 		}
 	}
