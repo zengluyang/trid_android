@@ -213,7 +213,6 @@ public class DemoHXSDKHelper extends HXSDKHelper{
 							obj = message.getJSONObjectAttribute("friend");
 							long avatar = obj.getLong("expire");
 							long avatar_ms =avatar*1000 ;
-							
 					    	Date date = new Date(avatar_ms);
 					    	SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					    	Log.i("loveme dealine",s.format(date));

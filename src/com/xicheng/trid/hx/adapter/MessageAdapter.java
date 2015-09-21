@@ -324,7 +324,7 @@ public class MessageAdapter extends BaseAdapter{
 					holder.tv = (TextView) convertView.findViewById(R.id.percentage);
 					holder.pb = (ProgressBar) convertView.findViewById(R.id.progressBar);
 					holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
-					holder.tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
+					
 				} catch (Exception e) {
 				}
 
@@ -335,8 +335,6 @@ public class MessageAdapter extends BaseAdapter{
 					holder.staus_iv = (ImageView) convertView.findViewById(R.id.msg_status);
 					// 这里是文字内容
 					holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
-					holder.tv_usernick = (TextView) convertView.findViewById(R.id.tv_userid);
-					
 					holder.tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
 					holder.tvList = (LinearLayout) convertView.findViewById(R.id.ll_layout);
 					holder.iv_avatar = (RoundProgressBarWidthNumber) convertView.findViewById(R.id.iv_userhead);

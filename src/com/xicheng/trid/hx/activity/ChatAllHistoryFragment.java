@@ -74,7 +74,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	private Handler handler;
 	private boolean hidden;
 	private List<EMConversation> conversationList = new ArrayList<EMConversation>();
-	private UserDao dao;
+	
 	private DataBaseExecutor executor;
 	private static final String TAG="ChatAllHistoryFragment";
 		
@@ -96,7 +96,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		//requestList();
 		conversationList.addAll(loadConversationsWithRecentChat());
 		//双方关系三天之后从列表中删除
-		delUserContact(conversationList);
+//		delUserContact(conversationList);
 		listView = (ListView) getView().findViewById(R.id.list);
 		executor=new DataBaseExecutor(getActivity());
 		Log.i(TAG+"MSGBODY",executor.getColumnValue(1, "msgbody")+" ");
@@ -152,7 +152,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		for(int i=0;i<conversationList.size();i++){
 			User user=UserUtils.getUserInfor(conversationList.get(i).getUserName());
 			//超过三天，关系移除
-			if((user.getAvatar()*1000-new Date().getTime())<=0){
+			if((user.getAvatar()-new Date().getTime())<=0){
 				templist.add(conversationList.get(i));
 				requestDeleteList(user.getUsername());
 				EMChatManager.getInstance().deleteConversation(user.getUsername());
@@ -231,7 +231,10 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	protected void handleResult(JSONObject obj,String username) {
 		try {
 			if(obj.getBoolean("success")){
-				dao.deleteContact(username);
+				//更新内存中的好友列表
+	    		UserDao dao = new UserDao(getActivity());
+            	dao.deleteContact(username);
+            	DemoApplication.getInstance().updateContactList();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -269,11 +272,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 			// 删除此会话
 			EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
 			//删除好友
-			requestDeleteFriend(tobeDeleteCons.getUserName());
-			//更新内存中的好友列表
-			UserDao dao = new UserDao(getActivity());
-	    	dao.deleteContact(tobeDeleteCons.getUserName());
-	    	DemoApplication.getInstance().updateContactList();
+			requestDeleteList(tobeDeleteCons.getUserName());
 		}
 		return handled ? true : super.onContextItemSelected(item);
 	}
@@ -311,15 +310,12 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 				String username = conversation.getUserName(); 
 				User user = UserUtils.getUserInfor(username);
 		    	Long deadline  = user.getAvatar();
-		    	if(deadline !=0 && deadline < System.currentTimeMillis())
+		    	if(deadline !=null && deadline < System.currentTimeMillis())
 		    	{
 		    		//三天到期，发送解除好友请求，删除对话
 		    		EMChatManager.getInstance().deleteConversation(username);
-		    		requestDeleteFriend(username);
-		    		//更新内存中的好友列表
-		    		UserDao dao = new UserDao(getActivity());
-                	dao.deleteContact(username);
-                	DemoApplication.getInstance().updateContactList();
+		    		requestDeleteList(username);
+		    	
 		    	}
 		        if (conversation.getAllMessages().size() != 0 ) {
 						sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
@@ -336,8 +332,6 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		for (Pair<Long, EMConversation> sortItem : sortList) {
 			list.add(sortItem.second);
 		}
-		
-		
 		return list;
 	}
 
@@ -399,13 +393,13 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	    JSONObject obj =  new JSONObject();
 	    try {
 			obj.put("tel", HXSDKHelper.getInstance().getHXId());
+			obj.put("token", HXSDKHelper.getInstance().getToken());
 			obj.put("type","delete_friend_request");
 			obj.put("peer_tel", peer_tel);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	   
 	    System.out.println(obj.toString());
 		//向服务器请求
 		HttpUtil.postRequest(url, obj.toString());
