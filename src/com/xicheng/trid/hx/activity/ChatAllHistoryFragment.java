@@ -321,7 +321,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
                 	dao.deleteContact(username);
                 	DemoApplication.getInstance().updateContactList();
 		    	}
-		    	else if (conversation.getAllMessages().size() != 0 ) {
+		        if (conversation.getAllMessages().size() != 0 ) {
 						sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
 				}
 			}
