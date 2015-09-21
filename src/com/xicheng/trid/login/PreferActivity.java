@@ -116,18 +116,9 @@ public class PreferActivity extends BaseActivity {
 			if (countDown > 0) {
 				intent = new Intent(PreferActivity.this, PreferActivity.class);
 			} else {
-				if (HXSDKHelper.getInstance().getNetworkState()) {
-					// 上传结果列表，并执行登陆
-					HttpUtil.postRequest(RequestUrlValue.PF_ANSWER_UPLOAD, new Gson().toJson(pfAnswerUpload));
-					return;
-				} else {
-					savePreferAnswer();
-					if (basicInfoRequired){
-						intent = new Intent(PreferActivity.this, BirthChooseActivity.class);
-					} else {
-						intent = new Intent(PreferActivity.this, MainActivity.class);
-					}
-				} 
+				// 上传结果列表，并执行登陆
+				HttpUtil.postRequest(RequestUrlValue.PF_ANSWER_UPLOAD, new Gson().toJson(pfAnswerUpload));
+				return;
 			}
 		}
 		startActivity(intent);
@@ -164,13 +155,9 @@ public class PreferActivity extends BaseActivity {
 		last = spref.getInt("last", 0);
 		// 相等则说明本地图片队列为空
 		if (last == current) {
-			if ( HXSDKHelper.getInstance().getNetworkState()) {// 网络连接正常
-				// 联网下载图片
-				PfPictureRequest post = new PfPictureRequest();
-				HttpUtil.postRequest(RequestUrlValue.PF_PICTURE_REQUEST, new Gson().toJson(post));// 请求下载并加载图片				
-			} else {//网络断开
-				showPicTriD();
-			}
+			// 联网下载图片
+			PfPictureRequest post = new PfPictureRequest();
+			HttpUtil.postRequest(RequestUrlValue.PF_PICTURE_REQUEST, new Gson().toJson(post));// 请求下载并加载图片
 		} else {
 			// 进入文件夹Xicheng/TriD/<tel>/prefer/prefer_id/
 			prefer_id = current;
@@ -260,28 +247,35 @@ public class PreferActivity extends BaseActivity {
 			} else if (obj.getString("type").equals(ResponseTypeValue.PF_ANSWER_UPLOAD_RESULT)) {
 				// 处理偏好（二选一)结果上传返回值
 				Intent intent;
-				if (!obj.getBoolean("success")){//偏好上传失败
-					savePreferAnswer();
-				}
-				if (basicInfoRequired) {
-					// 需要基础信息时跳转生日选择界面
-					intent = new Intent(PreferActivity.this, BirthChooseActivity.class);
+				if (obj.getBoolean("success")) {
+					// 偏好上传成功
+					if (basicInfoRequired) {
+						// 需要基础信息时跳转生日选择界面
+						intent = new Intent(PreferActivity.this, BirthChooseActivity.class);
+					} else {
+						// 跳转主界面
+						intent = new Intent(PreferActivity.this, MainActivity.class);
+					}
+					startActivity(intent);
+					finish();
 				} else {
-					// 跳转主界面
-					intent = new Intent(PreferActivity.this, MainActivity.class);
+					// 上传失败，登陆信息有误,跳转登陆界面
+					Toast.makeText(getApplicationContext(), "登陆信息失效，需要重新登陆", Toast.LENGTH_SHORT).show();
+					// --------start--------------------调试用------------------------------调试用-----------------------------------
+					// spref = getSharedPreferences("conn_data", MODE_PRIVATE);
+					// editor = spref.edit();
+					// editor.putBoolean("already_login", false);//清除登陆信息
+					// editor.commit();
+					// --------end--------------------调试用------------------------------调试用-----------------------------------
+					intent = new Intent(PreferActivity.this, LoginActivity.class);
+					startActivity(intent);
+					finish();
 				}
-				startActivity(intent);
-				finish();
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	private void savePreferAnswer() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	// ----start------------------------调试用------------------------------调试用-----------------------------------

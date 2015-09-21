@@ -35,6 +35,8 @@ import com.xicheng.trid.R;
 import com.xicheng.trid.hx.activity.BaseActivity;
 import com.xicheng.trid.hx.db.UserDao;
 import com.xicheng.trid.hx.domain.User;
+import com.xicheng.trid.json.DeleteFriends;
+import com.xicheng.trid.json.FriendListRequest;
 import com.xicheng.trid.json.SmsValidationCode;
 import com.xicheng.trid.json.SmsValidationRequest;
 import com.xicheng.trid.utils.HttpUtil;
@@ -150,7 +152,7 @@ public class LoginActivity extends BaseActivity {
 			for(int i=0;i<data.length();i++){
 				JSONObject info=data.getJSONObject(i);
 				User user=new User(info.getString("peer_tel"),info.getString("huanxin_id"),
-						info.getInt("type"),info.getString("chat_title"),info.getLong("expire"));
+						info.getInt("type"),info.getString("chat_title"),info.getLong("expire")*1000);
 				listUser.add(user);
 			}
 			dao.saveContactList(listUser);
@@ -312,16 +314,12 @@ public class LoginActivity extends BaseActivity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		   
 		    System.out.println(obj.toString());
 			//向服务器请求
 		    HttpUtil.setHandler(mHandler);
 			HttpUtil.postRequest(url, obj.toString());
-			
 		}
-		
-		
-		
 	}
+	
 
 }
