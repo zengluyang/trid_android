@@ -119,9 +119,9 @@ public class UserUtils {
     	Date now_date = new Date();
     	long nowTime = now_date.getTime();
     	if(deadline != null){
-    		Log.i("userutil", (deadline*1000-nowTime)+"");
+    		Log.i("userutil", (deadline-nowTime)+"");
     		
-        	progressBar.setProgress((int)((deadline*1000-nowTime)*100/THREEDAY_IN_MILLISECONDS));
+        	progressBar.setProgress((int)((deadline-nowTime)*100/THREEDAY_IN_MILLISECONDS));
         	
         }
     	return chat_title;
