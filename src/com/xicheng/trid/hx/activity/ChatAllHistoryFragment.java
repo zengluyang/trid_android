@@ -314,9 +314,10 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		    	{
 		    		//三天到期，发送解除好友请求，删除对话
 		    		EMChatManager.getInstance().deleteConversation(username);
+
 		    		requestDeleteList(username);		    	
 		    	}
-		        if (conversation.getAllMessages().size() != 0 ) {
+		    	else if (conversation.getAllMessages().size() != 0 ) {
 						sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
 				}
 			}
