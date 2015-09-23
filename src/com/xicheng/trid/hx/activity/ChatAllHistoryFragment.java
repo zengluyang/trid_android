@@ -265,10 +265,10 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	 * @param obj
 	 */
 	private void handleConverResult(JSONObject obj)throws Exception{
-		conversationList=JsonParser.getInstance().getConversationList(obj);
-		this.isfromSever=true;
+		conversationList=JsonParser.getInstance().getConversationList(obj);	
 		adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
 		listView.setAdapter(adapter);	
+		this.isfromSever=true;
 		Log.i(TAG+"SIZE",conversationList.size()+"");
 		
 		
