@@ -40,6 +40,7 @@ import com.xicheng.trid.hx.domain.User;
 import com.xicheng.trid.hx.utils.UserUtils;
 import com.xicheng.trid.main.Constant;
 import com.xicheng.trid.receivers.NetworkChangeReceiver;
+import com.xicheng.trid.utils.ActivityController;
 import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.value.ResponseTypeValue;
 
@@ -71,6 +72,7 @@ public abstract class BaseActivity extends FragmentActivity {
         intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         networkChangeReceiver=new NetworkChangeReceiver();
         registerReceiver(networkChangeReceiver,intentFilter);
+        ActivityController.addActivity(this);
        
     }
 
@@ -102,6 +104,7 @@ public abstract class BaseActivity extends FragmentActivity {
     protected void onDestroy(){
     	super.onDestroy();
     	unregisterReceiver(networkChangeReceiver);
+    	ActivityController.removeActivity(this);
     }
     /**
      * 返回

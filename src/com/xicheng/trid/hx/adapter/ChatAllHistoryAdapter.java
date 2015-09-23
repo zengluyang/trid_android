@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -57,21 +58,24 @@ import com.xicheng.trid.progressbar.RoundProgressBarWidthNumber;
  * 显示所有聊天记录adpater
  * 
  */
-public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
+public class ChatAllHistoryAdapter extends BaseAdapter {
 
 	private static final String TAG = "ChatAllHistoryAdapter";
 	private LayoutInflater inflater;
 	private List<EMConversation> conversationList;
 	private List<EMConversation> copyConversationList;
+	private Context context;
 
     private boolean notiyfyByFilter;
 
 	public ChatAllHistoryAdapter(Context context, int textViewResourceId, List<EMConversation> objects) {
-		super(context, textViewResourceId, objects);
+		super();
+		this.context=context;
 		this.conversationList = objects;
 		copyConversationList = new ArrayList<EMConversation>();
 		copyConversationList.addAll(objects);
 		inflater = LayoutInflater.from(context);
+		Log.i(TAG,"conversationlist"+copyConversationList.size());
 	}
 
 	@Override
@@ -93,44 +97,49 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
 			holder.list_item_layout.setBackgroundResource(R.drawable.mm_listitem);
 			convertView.setTag(holder);
 		}
-		
+		if (getItem(position) != null) {
+			// 获取与此用户/群组的会话
+			EMConversation conversation = (EMConversation) getItem(position);
+			// 获取用户username
+			String username = conversation.getUserName();
 
-		// 获取与此用户/群组的会话
-		EMConversation conversation = getItem(position);
-		// 获取用户username
-		String username = conversation.getUserName(); 
-		//设置头像,聊天标题
-		String chat_title = UserUtils.getUserAvatar_ChatTitle(username, holder.avatar);
-		
-		//看该用户是否设置了chattitle
-		if(chat_title!= null ){
-			holder.chat_title.setText(chat_title);
-		}else{
-			holder.chat_title.setText(username);
-		}
-		if (conversation.getUnreadMsgCount() > 0) {
-			// 显示与此用户的消息未读数
-			holder.unreadLabel.setText("["+String.valueOf(conversation.getUnreadMsgCount())+"条]");
-			holder.unreadLabel.setVisibility(View.VISIBLE);
-		} else {
-			holder.unreadLabel.setVisibility(View.GONE);
-		}
-		
-		
-		 if (conversation.getMsgCount() != 0) {
-			// 把最后一条消息的内容作为item的message内容
-			EMMessage lastMessage = conversation.getLastMessage();
-			holder.message.setText(SmileUtils.getSmiledText(getContext(), getMessageDigest(lastMessage, (this.getContext()))),
-					BufferType.SPANNABLE);
-
-			holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
-			if (lastMessage.direct == EMMessage.Direct.SEND && lastMessage.status == EMMessage.Status.FAIL) {
-				holder.msgState.setVisibility(View.VISIBLE);
+			// 设置头像,聊天标题
+			String chat_title = UserUtils.getUserAvatar_ChatTitle(username,
+					holder.avatar);
+			// 看该用户是否设置了chattitle
+			if (chat_title != null) {
+				holder.chat_title.setText(chat_title);
 			} else {
-				holder.msgState.setVisibility(View.GONE);
+				holder.chat_title.setText(username);
+			}
+			if (conversation.getUnreadMsgCount() > 0) {
+				// 显示与此用户的消息未读数
+				holder.unreadLabel.setText("["
+						+ String.valueOf(conversation.getUnreadMsgCount())
+						+ "条]");
+				holder.unreadLabel.setVisibility(View.VISIBLE);
+			} else {
+				holder.unreadLabel.setVisibility(View.GONE);
+			}
+
+			if (conversation.getMsgCount() != 0) {
+				// 把最后一条消息的内容作为item的message内容
+				EMMessage lastMessage = conversation.getLastMessage();
+				holder.message.setText(
+						SmileUtils.getSmiledText(context,
+								getMessageDigest(lastMessage, (context))),
+						BufferType.SPANNABLE);
+
+				holder.time.setText(DateUtils.getTimestampString(new Date(
+						lastMessage.getMsgTime())));
+				if (lastMessage.direct == EMMessage.Direct.SEND
+						&& lastMessage.status == EMMessage.Status.FAIL) {
+					holder.msgState.setVisibility(View.VISIBLE);
+				} else {
+					holder.msgState.setVisibility(View.GONE);
+				}
 			}
 		}
-
 		return convertView;
 	}
 
@@ -217,5 +226,24 @@ public class ChatAllHistoryAdapter extends ArrayAdapter<EMConversation> {
             copyConversationList.addAll(conversationList);
             notiyfyByFilter = false;
         }
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return (conversationList==null)?0:conversationList.size();
+	}
+
+	@Override
+	public EMConversation getItem(int position) {
+		if (conversationList != null && position < conversationList.size()) {
+			return conversationList.get(position);
+		}
+		return null;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
 	}
 }

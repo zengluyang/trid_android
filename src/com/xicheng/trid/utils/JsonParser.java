@@ -59,7 +59,6 @@ public class JsonParser {
 				String messageType=info.getString("from").equals(HXSDKHelper.getInstance().getHXId())?"send":"receive";
 				String type=info.getJSONObject("payload").getJSONArray("bodies")
 						.getJSONObject(0).getString("type");
-				Log.i(TAG,type);
 				//消息类型为文本类
 				if(type.equals("txt")){
 					if(messageType.equals("send"))
@@ -140,7 +139,6 @@ public class JsonParser {
 		try {
 			JSONArray data=obj.getJSONArray("chat_records");
 			for(int i=0;i<data.length();i++){
-				Log.i(TAG,data.getJSONObject(i).toString());
 				list.add(getConversation(data.getJSONObject(i)));
 			}
 		} catch (JSONException e) {

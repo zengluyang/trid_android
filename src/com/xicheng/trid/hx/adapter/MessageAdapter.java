@@ -561,7 +561,6 @@ public class MessageAdapter extends BaseAdapter{
 		TextMessageBody txtBody = (TextMessageBody) message.getBody();
 		Spannable span = SmileUtils.getSmiledText(context, txtBody.getMessage());
 		// 设置内容
-		Log.i(TAG+566,txtBody.getMessage()+"  ");
 		holder.tv.setText(span, BufferType.SPANNABLE);
 		// 设置长按事件监听
 		holder.tv.setOnLongClickListener(new OnLongClickListener() {

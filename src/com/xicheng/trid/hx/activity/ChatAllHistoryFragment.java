@@ -57,6 +57,7 @@ import com.xicheng.trid.json.CommonInfo;
 import com.xicheng.trid.json.DeleteFriends;
 import com.xicheng.trid.json.FriendListRequest;
 import com.xicheng.trid.main.MainActivity;
+import com.xicheng.trid.utils.ActivityController;
 import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.utils.JsonParser;
 import com.xicheng.trid.value.RequestUrlValue;
@@ -74,7 +75,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	private Handler handler;
 	private boolean hidden;
 	private List<EMConversation> conversationList = new ArrayList<EMConversation>();
-	
+	private boolean isfromSever=false;
 	private DataBaseExecutor executor;
 	private static final String TAG="ChatAllHistoryFragment";
 		
@@ -94,21 +95,21 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
             return;
 		inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);	
 		//requestList();
+		conversationList.clear();
 		conversationList.addAll(loadConversationsWithRecentChat());
 		//双方关系三天之后从列表中删除
 //		delUserContact(conversationList);
 		listView = (ListView) getView().findViewById(R.id.list);
 		executor=new DataBaseExecutor(getActivity());
 		Log.i(TAG+"MSGBODY",executor.getColumnValue(1, "msgbody")+" ");
+		Log.i(TAG+"listsize",conversationList.size()+"  ");
 		if(conversationList.size()==0){
 			requestConver();
 		}
 		else{
 			adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
-			// 设置adapter
-			listView.setAdapter(adapter);
-		}		
-		
+			listView.setAdapter(adapter);		
+		}
 		final String st2 = getResources().getString(R.string.Cant_chat_with_yourself);
 		
 		//单击进入单聊页面
@@ -116,7 +117,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				EMConversation conversation = adapter.getItem(position);
+				EMConversation conversation = (EMConversation) adapter.getItem(position);
 				String username = conversation.getUserName();
 				if (username.equals(DemoApplication.getInstance().getUserName()))
 					Toast.makeText(getActivity(), st2, 0).show();
@@ -142,7 +143,59 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 			}
 
 		});
+		
+		
+		
+		Handler newhandler=new Handler(Looper.getMainLooper()){
+			public void handleMessage(Message msg)
+			{
+				if(msg.what==100){
+					ActivityController.finishAll();
+					Intent i = getActivity().getBaseContext().getPackageManager() 
+							.getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName()); 
+							i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+							startActivity(i);
+				}	
+				else if(msg.what==200){
+					refresh();
+				}
+			}
+		};
+		importMessageIfNecessary(newhandler);
+		
 	}
+
+	
+	private void importMessageIfNecessary(final Handler handler) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {	
+				while (true){
+					try {
+						Thread.sleep(50);
+						if(isfromSever){
+							for(int i=0;i<conversationList.size();i++){
+								EMChatManager.getInstance().importMessages(conversationList.get(i).getAllMessages());
+							}
+							EMChatManager.getInstance().loadAllConversations();
+							isfromSever=false;
+							Log.i("TAG LINE165",conversationList.size()+" ");
+							Message msg=handler.obtainMessage();
+							msg.what=200;
+							//Thread.sleep(5000);
+						    handler.sendMessage(msg);
+							
+							break;
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+				}
+			}	
+		}).start();
+	}
+
 	/**
 	 * 处理与联系人的关系，三天后删除
 	 * @param conversationList
@@ -196,7 +249,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 					try {
 						JSONObject obj = new JSONObject(msg.obj.toString());
 						handleConverResult(obj);
-					} catch (JSONException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}	
@@ -209,15 +262,14 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	 * 获取历史记录以得到conversationList
 	 * @param obj
 	 */
-	private void handleConverResult(JSONObject obj){
+	private void handleConverResult(JSONObject obj)throws Exception{
 		conversationList=JsonParser.getInstance().getConversationList(obj);
-		for(int i=0;i<conversationList.size();i++){
-			EMChatManager.getInstance().importMessages(conversationList.get(i).getAllMessages());
-		}
+		this.isfromSever=true;
+		adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
+		listView.setAdapter(adapter);	
 		Log.i(TAG+"SIZE",conversationList.size()+"");
 		
-		adapter = new ChatAllHistoryAdapter(getActivity(), 1, conversationList);
-		listView.setAdapter(adapter);
+		
 	}
 	
 
@@ -268,7 +320,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		} else if (item.getItemId() == R.id.delete_contact) {
 			deleteMessage = true;
 			handled = true;
-			EMConversation tobeDeleteCons = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+			EMConversation tobeDeleteCons = (EMConversation) adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
 			// 删除此会话
 			EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
 			//删除好友
@@ -283,6 +335,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	public void refresh() {
 		conversationList.clear();
 		conversationList.addAll(loadConversationsWithRecentChat());
+		Log.i(TAG+"refresh", conversationList.size()+"");
 		if(adapter != null)
 		    adapter.notifyDataSetChanged();
 	}
@@ -295,8 +348,10 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         +	 */
 	private List<EMConversation> loadConversationsWithRecentChat() {
 		
+		EMChatManager.getInstance().loadAllConversations();
 		// 获取内存中的所有会话（先用load message），包括陌生人?
 		Hashtable<String, EMConversation> conversations = EMChatManager.getInstance().getAllConversations();
+		Log.i("conversations",conversations.toString());
 		// 过滤掉messages size为0的conversation
 		/**
 		 * 如果在排序过程中有新消息收到，lastMsgTime会发生变化
@@ -320,7 +375,9 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		    	else if (conversation.getAllMessages().size() != 0 ) {
 						sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
 				}
+		    	
 			}
+			Log.i("sortlist", sortList.size()+" ");
 		}
 		try {
 			// Internal is TimSort algorithm, has bug
@@ -332,6 +389,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		for (Pair<Long, EMConversation> sortItem : sortList) {
 			list.add(sortItem.second);
 		}
+		Log.i("list",list.toString());
 		return list;
 	}
 
@@ -370,6 +428,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 	public void onResume() {
 		super.onResume();
 		if (!hidden && ! ((MainActivity)getActivity()).isConflict) {
+			Log.i(TAG,"onResume");
 			refresh();
 		}
 	}

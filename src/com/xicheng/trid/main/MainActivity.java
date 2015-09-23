@@ -513,6 +513,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 				new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage,
 						EMNotifierEvent.Event.EventOfflineMessage,
 						EMNotifierEvent.Event.EventConversationListChanged });
+	
 	}
 
 	@Override
