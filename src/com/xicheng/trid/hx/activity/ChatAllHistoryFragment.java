@@ -150,6 +150,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 			public void handleMessage(Message msg)
 			{
 				if(msg.what==100){
+					//调用系统函数重启(放弃)
 					ActivityController.finishAll();
 					Intent i = getActivity().getBaseContext().getPackageManager() 
 							.getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName()); 
@@ -157,6 +158,7 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 							startActivity(i);
 				}	
 				else if(msg.what==200){
+					//刷新视图
 					refresh();
 				}
 			}
@@ -164,8 +166,8 @@ public class ChatAllHistoryFragment extends Fragment implements OnClickListener 
 		importMessageIfNecessary(newhandler);
 		
 	}
-
-	
+	//由于imoportmessage导致conversationlist的消息为空，这里采取开子线程的方法，放慢importmessage的步骤，让
+	//adapter先一步加载
 	private void importMessageIfNecessary(final Handler handler) {
 		new Thread(new Runnable() {
 			@Override
