@@ -101,6 +101,7 @@ public class JsonParser {
 					Log.i(TAG,"error");
 					break;
 				}
+				msg.status=EMMessage.Status.SUCCESS;
 				msg.setTo(info.getString("to"));
 				msg.setFrom(info.getString("from"));
 				msg.setMsgId(info.getString("msg_id"));

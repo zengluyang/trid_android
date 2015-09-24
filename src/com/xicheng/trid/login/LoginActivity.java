@@ -39,6 +39,7 @@ import com.xicheng.trid.json.DeleteFriends;
 import com.xicheng.trid.json.FriendListRequest;
 import com.xicheng.trid.json.SmsValidationCode;
 import com.xicheng.trid.json.SmsValidationRequest;
+import com.xicheng.trid.main.MainActivity;
 import com.xicheng.trid.utils.HttpUtil;
 import com.xicheng.trid.utils.MyCountDownTimer;
 import com.xicheng.trid.value.RequestUrlValue;
